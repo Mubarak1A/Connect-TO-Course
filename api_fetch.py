@@ -2,14 +2,15 @@
 """Module to fetch data from the extenal api"""
 
 import requests
+import creds
 
 def get_urls():
     """get the courses urls"""
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names/course-instructor/course-url"
 
     headers = {
-        "X-RapidAPI-Key": "1896963109msh2cb2a05e74add57p10f279jsnd6c70a71e9a0",
-        "X-RapidAPI-Host": "udemy-course-scrapper-api.p.rapidapi.com"
+        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Host": creds.host
     }
 
     response = requests.get(url, headers=headers)
@@ -29,8 +30,8 @@ def get_instructors():
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names/course-instructor"
 
     headers = {
-        "X-RapidAPI-Key": "1896963109msh2cb2a05e74add57p10f279jsnd6c70a71e9a0",
-        "X-RapidAPI-Host": "udemy-course-scrapper-api.p.rapidapi.com"
+        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Host": creds.host
     }
     response = requests.get(url, headers=headers)
     instructors_data = response.json()
@@ -48,8 +49,8 @@ def get_titles():
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names"
 
     headers = {
-        "X-RapidAPI-Key": "1896963109msh2cb2a05e74add57p10f279jsnd6c70a71e9a0",
-        "X-RapidAPI-Host": "udemy-course-scrapper-api.p.rapidapi.com"
+        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Host": creds.host
     }
 
     response = requests.get(url, headers=headers)
