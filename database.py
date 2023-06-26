@@ -6,7 +6,7 @@ import creds
 
 db_username = creds.username
 db_password = creds.passwd
-db_host = creds.host
+db_host = creds.db_host
 db_name = creds.database
 
 engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_password, db_host, db_name),
@@ -16,6 +16,7 @@ engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_
                            }
                        })
 
-with engine.connect() as conn:
-    result = conn.execute(text("select * from courses"))
-    print(result.all())
+
+with engine.connect() as conn2:
+    results = conn2.execute(text("SELECT * FROM courses"))
+    print(results.fetchall())

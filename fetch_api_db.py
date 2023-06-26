@@ -10,7 +10,7 @@ def get_urls():
 
     headers = {
         "X-RapidAPI-Key": creds.key,
-        "X-RapidAPI-Host": creds.host
+        "X-RapidAPI-Host": creds.api_host
     }
 
     response = requests.get(url, headers=headers)
@@ -31,7 +31,7 @@ def get_instructors():
 
     headers = {
         "X-RapidAPI-Key": creds.key,
-        "X-RapidAPI-Host": creds.host
+        "X-RapidAPI-Host": creds.api_host
     }
     response = requests.get(url, headers=headers)
     instructors_data = response.json()
@@ -50,7 +50,7 @@ def get_titles():
 
     headers = {
         "X-RapidAPI-Key": creds.key,
-        "X-RapidAPI-Host": creds.host
+        "X-RapidAPI-Host": creds.api_host
     }
 
     response = requests.get(url, headers=headers)
@@ -80,3 +80,16 @@ def assemble_data():
         index += 1
 
     return courses
+
+#courses_data = assemble_data()
+
+#fetch the datas in the cloud databse
+#with engine.connect() as conn:
+#    for course in courses_data:
+#        title = course["title"]
+#        url = course["URL"]
+#        instructor = course["instructor"]
+#
+#        query = text("INSERT INTO courses (title, url, instructor) VALUES (:title, :url, :instructor)")
+#        result = conn.execute(query, {"title": title, "url": url, "instructor": instructor})
+#        print("Insert successful!")
