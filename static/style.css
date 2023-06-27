@@ -173,7 +173,9 @@ div.psw {
 	.flex-item1 {
 		padding-left: 10px;
 	}
-
+	.container {
+		margin: 0px 20px 0px 20px;	
+	}
 	
 }
 
@@ -198,7 +200,6 @@ div.psw {
 .flex-item1 {
 	max-width: 100%;
 	flex: 0 0 30em;
-	margin: auto;
 	padding: 0 1% 0 1%;
 	background-color: white;
 	font-size: 1em;
