@@ -17,6 +17,6 @@ engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_
                        })
 
 
-with engine.connect() as conn2:
-    results = conn2.execute(text("SELECT * FROM courses"))
-    print(results.fetchall())
+with engine.connect() as conn:
+    courses_results = conn.execute(text("SELECT * FROM courses"))
+    users_results = conn.execute(text("SELECT * FROM users"))
