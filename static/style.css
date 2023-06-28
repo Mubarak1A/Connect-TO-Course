@@ -176,6 +176,9 @@ div.psw {
 	.container {
 		margin: 0px 20px 0px 20px;	
 	}
+	.flex-item1 h1 {
+		font-size: 30px;
+	}
 	
 }
 

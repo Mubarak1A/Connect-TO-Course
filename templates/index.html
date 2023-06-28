@@ -10,6 +10,8 @@
 <meta name="keywords" content="free good best top online courses choice build career">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="static/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="static/script.js"></script>
 </head>
 <body>
 <header>Connect to Course
@@ -33,7 +35,7 @@
 
                 <div class="fcontainer">
                         <h1>Log in</h1>
-                        <p>Please fill this form to log in to your account</p>
+                        <p style="font-size: 16px;">Please fill this form to log in</p>
                 <hr>
                         <label for="username"><b>Username</b></label>
                         <input type="text" placeholder="Enter Username" name="username" required>
@@ -102,7 +104,7 @@
                 <div class="flex-item2"><br><br>
                         <img src="static/images/img.png" style="width: 200px;">
                                 <br><br>
-                                <form class="search-container" action="/" style="width: 100%;">
+                                <form class="search-container" action="{{ 'search' }}" method="GET" style="width: 100%;">
                                         <input type="text" placeholder="Search.." name="search">
                                         <button type="submit" name="search"><i class="fa fa-search"></i></button>
                                 </form>
@@ -111,22 +113,32 @@
         </div>
 </div>
 <br>
-<div class="result"><h3>Recommended</h3></div>
+
+<p>{{ results }}</p>
+{% if results %}
+<div class="result"><h3>Search Results</h3></div>
 <br>
 
 <div class="container">
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+	{% for result in results %}
+	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;">{{ result.title }}<p>{{ result.instructor }}</p><a href='{{ result.url }}'>visit</a></div>
+	{% endfor %}
 </div>
 
+{% else %}
+	<div class="result"><h3>Recommended</h3></div>
+	<div class="container">
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+        	<div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+	</div>
+{% endif %}
 <br>
 <br><br><br>
 <br>
