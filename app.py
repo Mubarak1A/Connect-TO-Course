@@ -1,63 +1,96 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-import os
-from sqlalchemy import create_engine, text, exc
-import database
-  
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
+app.secret_key = '123'
 
-email = "adesinamubarak123@gmail.com"
+# Configure MySQL database connection
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/db_name'
+db = SQLAlchemy(app)
 
-@app.route('/')
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    instructor = db.Column(db.String(80), nullable=False)
+    url = db.Column(db.String(100), nullable=False)
+    course_id = db.Column(db.String(10), nullable=False)
+
+    def __repr__(self):
+        return f'<Course {self.title}>'
+
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        if 'signupbtn' in request.form:
+            session['username'] = request.form['username']
+            password = request.form['password']
 
-@app.route('/', methods=['POST'])
-def check_login():
-    username = request.form['username']
-    passwd = request.form['password']
-    
-    with database.engine.connect() as conn:
-        query1 = text("SELECT username, passwd FROM users WHERE username = :username AND passwd = :passwd")
-        result = conn.execute(query1, {"username": username, "passwd": passwd})
-        
-    data = result.fetchall()
-    
-    if len(data) == 1:
-        return render_template('User_page.html')
-    
+            # Create a new user in the database
+            user = User(username=session['username'], password=password)
+            db.session.add(user)
+            db.session.commit()
+
+            return redirect(url_for('userpage'))
+        elif 'loginbtn' in request.form:
+            session['username'] = request.form['username']
+            password = request.form['password']
+
+            # Validate credentials and perform login logic using the database
+            user = User.query.filter_by(username=session['username'], password=password).first()
+            if user:
+                return redirect(url_for('userpage'))
+
+    # Retrieve random courses and saved courses from the database
+    r_results = Course.query.all()
+    s_results = Course.query.all()
+
+    return render_template('index.html', r_courses=r_results, s_courses=s_results)
+
+
+@app.route("/user", methods=['GET', 'POST'])
+def userpage():
+    if 'username' in session:
+        username = session['username']
+        r_results = Course.query.all()
+        return render_template('User_page.html', username=username, r_courses=r_results)
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    session.clear()
     return redirect(url_for('index'))
 
-@app.route('/', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        username = request.form['username']
-        passwd = request.form['password']
-        email = request.form['email']
-        
-        try:
-            with database.engine.connect() as conn:
-                query1 = text("SELECT username, passwd FROM users WHERE username = :username AND passwd = :passwd")
-                result = conn.execute(query1, {"username": username, "passwd": passwd})
 
-            data = result.fetchall()
-            
-            if len(data) == 0:
-                query2 = text("INSERT INTO users (username, passwd, email) VALUES (:username, :passwd, :email)")
-                result = conn.execute(query2, {"username": username, "passwd": passwd, "email": email})
-                return redirect(url_for('index'))
-            else:
-                return redirect(url_for('index'))
-        
-        except exc.OperationalError as e:
-            # Reestablish the connection and retry the query
-            database.engine.dispose()
-            database.engine.connect()
-            return redirect(url_for('index'))
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '')
 
-    return render_template('index.html')
+    search_results = Course.query.filter(Course.title.ilike(f'%{query}%')).all()
 
+    return jsonify(results=[{
+        'title': course.title,
+        'instructor': course.instructor,
+        'url': course.url,
+        'course_id': course.course_id
+    } for course in search_results])
 
-    
 
 if __name__ == '__main__':
+    # Create the database tables if they do not exist
+    with app.app_context():
+        db.create_all()
+
     app.run(debug=True)
