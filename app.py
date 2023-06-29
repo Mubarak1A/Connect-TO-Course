@@ -1,11 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import creds
 
 app = Flask(__name__)
 app.secret_key = '123'
 
+db_username = creds.username
+db_password = creds.passwd
+db_host = creds.db_host
+db_name = creds.database
+
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/db_name'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_password, db_host, db_name)'
 db = SQLAlchemy(app)
 
 
@@ -89,8 +95,4 @@ def search():
 
 
 if __name__ == '__main__':
-    # Create the database tables if they do not exist
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
