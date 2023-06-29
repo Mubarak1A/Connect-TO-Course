@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.secret_key = '123'
 username = 'Elizabeth'
 
+
 # Sample user for login demonstration
 sample_user = User(username='Elizabeth', password='12345')
 # Sample courses from database to test frontend. Remove it
@@ -20,6 +21,8 @@ courses = [
         {'title': 'Python 2023', 'instructor': 'Elizabeth .A', 'url': 'www.udemy/course6', 'course_id': '127'}
     ]
 
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -27,24 +30,35 @@ def index():
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # @Mubarak: Please validate input and create user in the database.
+            # Please validate input and create user in the database.
 
             return redirect(url_for('userpage'))
         elif 'loginbtn' in request.form:
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # @Mubarak: Please validate credentials and perform login logic.
+            # Please validate credentials and perform login logic.
 
             if username == sample_user.username and password == sample_user.password:
                 return redirect(url_for('userpage'))
-    return render_template('index.html')
+    
+    #For testing.
+    #Please be r_courses be the random courses, s_courses for saved courses.
+    r_results = []
+    for item in courses:
+        r_results.append(item)                                              
+
+    return render_template('index.html', r_courses=r_results, s_courses=r_results)
+
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
     if 'username' in session:
         username = session['username']
-        return render_template('User_page.html', username=username)
+        r_results = []
+        for item in courses:
+            r_results.append(item)
+        return render_template('User_page.html', username=username, r_courses=r_results)
     else:
         return redirect(url_for('index'))
 
