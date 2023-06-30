@@ -163,6 +163,7 @@ cython_debug/
 creds.py
 
 #env files
+bin/
 Include/
 Lib/
 Scripts/
