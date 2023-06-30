@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, g
-import os
-from models import User, Course
-  
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import creds
+
 app = Flask(__name__)
 app.secret_key = '123'
 
@@ -11,8 +12,10 @@ db_host = creds.db_host
 db_name = creds.database
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_name}?ssl_ca=/etc/ssl/cert.pem'
-db = SQLAlchemy(app)
+db_uri = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_name}?ssl_ca=/etc/ssl/cert.pem'
+engine = create_engine(db_uri)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 class User(db.Model):
@@ -34,8 +37,6 @@ class Course(db.Model):
     def __repr__(self):
         return f'<Course {self.title}>'
 
-# Sample user for login demonstration
-sample_user = User(username='Elizabeth', password='12345')
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -44,25 +45,34 @@ def index():
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # @Mubarak: Please validate input and create user in the database.
+            # Create a new user in the database
+            user = User(username=session['username'], password=password)
+            session.add(user)
+            session.commit()
 
             return redirect(url_for('userpage'))
         elif 'loginbtn' in request.form:
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # @Mubarak: Please validate credentials and perform login logic.
-
-            if username == sample_user.username and password == sample_user.password:
+            # Validate credentials and perform login logic using the database
+            user = session.query(User).filter_by(username=session['username'], password=password).first()
+            if user:
                 return redirect(url_for('userpage'))
-    return render_template('index.html')
-    
+
+    # Retrieve random courses and saved courses from the database
+    r_results = session.query(Course).all()
+    s_results = session.query(Course).all()
+
+    return render_template('index.html', r_courses=r_results, s_courses=s_results)
+
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
     if 'username' in session:
         username = session['username']
-        return render_template('User_page.html', username=username)
+        r_results = session.query(Course).all()
+        return render_template('User_page.html', username=username, r_courses=r_results)
     else:
         return redirect(url_for('index'))
 
@@ -77,7 +87,7 @@ def logout():
 def search():
     query = request.args.get('query', '')
 
-    search_results = Course.query.filter(Course.title.ilike(f'%{query}%')).all()
+    search_results = session.query(Course).filter(Course.title.ilike(f'%{query}%')).all()
 
     return jsonify(results=[{
         'title': course.title,
@@ -87,18 +97,7 @@ def search():
     } for course in search_results])
 
 
-
-@app.route('/search' , methods=['GET'])
-def search():
-    query = request.args.get('query', '')
-
-    search_results = []
-    for item in courses:
-        if query.lower() in item['title'].lower():
-            search_results.append(item)
-
-    return jsonify(results=search_results)
-
-
 if __name__ == '__main__':
     app.run(debug=True)
+
+
