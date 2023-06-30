@@ -10,6 +10,9 @@
 <meta name="keywords" content="free good best top online courses choice build career">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="static/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="static/ajax.js"></script>
+<script src="static/script.js"></script>
 </head>
 <body>
 <header>Connect to Course
@@ -33,7 +36,7 @@
 
                 <div class="fcontainer">
                         <h1>Log in</h1>
-                        <p>Please fill this form to log in to your account</p>
+                        <p style="font-size: 16px;">Please fill this form to log in</p>
                 <hr>
                         <label for="username"><b>Username</b></label>
                         <input type="text" placeholder="Enter Username" name="username" required>
@@ -94,37 +97,41 @@
 
 
 <div class="container">
-        <div class="flex-item1"><h1  style="margin-top: 0px;">Learn everything in a place</h1>
+        <div class="flex-item1" style="padding-left: auto;"><h1 style="margin-top: 0px;">Learn everything in a place</h1>
                 <p>Seach for courses, get an up-to-date online courses and sign up for free to bookmark your prefered or choiced courses.</p>
         </div>
 
         <div class="flex-item1">
-                <div class="flex-item2"><br><br>
-                        <img src="static/images/img.png" style="width: 200px;">
+                <div class="flex-item2">
+                        <img src="static/images/img.png" style="width: 170px;">
                                 <br><br>
-                                <form class="search-container" action="/" style="width: 100%;">
-                                        <input type="text" placeholder="Search.." name="search">
-                                        <button type="submit" name="search"><i class="fa fa-search"></i></button>
+                                <form class="search-container" style="width: 100%;">
+                                        <input type="text" id="search-input" placeholder="Search.." required>
+                                        <button type="submit"><i class="fa fa-search"></i></button>
                                 </form>
-                        </div>
+                </div>
 
         </div>
 </div>
-<br>
-<div class="result"><h3>Recommended</h3></div>
+
+<!-- Search Results comes in here -->
+<div class="result" id="result-head"><h3></h3></div>
+<div class="container" id="search-results"> </div>
+
+<!-- Generate 10 random courses -->
+<div class="result"><h3>Random Courses</h3></div>
 <br>
 
 <div class="container">
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"> </div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
-        <div class="flex-item3"> <img src="static/images/img2.png" style="width: 100%;"></div>
+	{% for result in r_courses %}
+	<div class="flex-item3">
+		<img src="static/images/img2.png" style="width: 100%;">
+		<b>{{ result.title }}</b>
+		<br><i style="font-size: 0.8em">{{ result.instructor }}</i><br>
+		<button><a href='{{ result.url }}'>Visit</a></button>
+		<button><a href='{{ result.url }}'>Save</a></button>
+	</div>
+	{% endfor %}
 </div>
 
 <br>

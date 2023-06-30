@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_sqlalchemy import SQLAlchemy
-import creds
-
+from flask import Flask, render_template, request, redirect, url_for, session, g
+import os
+from models import User, Course
+  
 app = Flask(__name__)
 app.secret_key = '123'
 
@@ -34,6 +34,8 @@ class Course(db.Model):
     def __repr__(self):
         return f'<Course {self.title}>'
 
+# Sample user for login demonstration
+sample_user = User(username='Elizabeth', password='12345')
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -42,34 +44,25 @@ def index():
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # Create a new user in the database
-            user = User(username=session['username'], password=password)
-            db.session.add(user)
-            db.session.commit()
+            # @Mubarak: Please validate input and create user in the database.
 
             return redirect(url_for('userpage'))
         elif 'loginbtn' in request.form:
             session['username'] = request.form['username']
             password = request.form['password']
 
-            # Validate credentials and perform login logic using the database
-            user = User.query.filter_by(username=session['username'], password=password).first()
-            if user:
+            # @Mubarak: Please validate credentials and perform login logic.
+
+            if username == sample_user.username and password == sample_user.password:
                 return redirect(url_for('userpage'))
-
-    # Retrieve random courses and saved courses from the database
-    r_results = Course.query.all()
-    s_results = Course.query.all()
-
-    return render_template('index.html', r_courses=r_results, s_courses=s_results)
-
+    return render_template('index.html')
+    
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
     if 'username' in session:
         username = session['username']
-        r_results = Course.query.all()
-        return render_template('User_page.html', username=username, r_courses=r_results)
+        return render_template('User_page.html', username=username)
     else:
         return redirect(url_for('index'))
 
@@ -92,6 +85,19 @@ def search():
         'url': course.url,
         'course_id': course.course_id
     } for course in search_results])
+
+
+
+@app.route('/search' , methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+
+    search_results = []
+    for item in courses:
+        if query.lower() in item['title'].lower():
+            search_results.append(item)
+
+    return jsonify(results=search_results)
 
 
 if __name__ == '__main__':

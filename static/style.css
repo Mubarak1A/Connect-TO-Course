@@ -173,7 +173,12 @@ div.psw {
 	.flex-item1 {
 		padding-left: 10px;
 	}
-
+	.container {
+		margin: 0px 20px 0px 20px;	
+	}
+	.flex-item1 h1 {
+		font-size: 30px;
+	}
 	
 }
 
@@ -198,7 +203,6 @@ div.psw {
 .flex-item1 {
 	max-width: 100%;
 	flex: 0 0 30em;
-	margin: auto;
 	padding: 0 1% 0 1%;
 	background-color: white;
 	font-size: 1em;
@@ -216,6 +220,18 @@ div.psw {
 	margin: auto;
 	border: 1px solid #1E90FF;
 	
+}
+
+.flex-item3 button {
+	background-color: #82CAFF;
+	color: white;
+	cursor: pointer;
+	border: none;
+}
+
+.flex-item3 a {
+	color: white;
+	text-decoration: none;
 }
 
 form.search-container input[type=text] {
@@ -264,7 +280,7 @@ form.search-container::after {
 }
 
 .sidenav a {
-	padding: 8px 8px 8px 32px;
+	/*padding: 8px 8px 8px 32px;*/
 	text-decoration: none;
 	font-size: 25px;
 	color: #818181;
