@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 import creds
 
 app = Flask(__name__)
@@ -12,10 +11,8 @@ db_host = creds.db_host
 db_name = creds.database
 
 # Configure MySQL database connection
-db_uri = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_name}?ssl_ca=/etc/ssl/cert.pem'
-engine = create_engine(db_uri)
-Session = sessionmaker(bind=engine)
-session = Session()
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_name}?ssl_ca=/etc/ssl/cert.pem'
+db = SQLAlchemy(app)
 
 
 class User(db.Model):
@@ -47,8 +44,8 @@ def index():
 
             # Create a new user in the database
             user = User(username=session['username'], password=password)
-            session.add(user)
-            session.commit()
+            db.session.add(user)
+            db.session.commit()
 
             return redirect(url_for('userpage'))
         elif 'loginbtn' in request.form:
@@ -56,13 +53,13 @@ def index():
             password = request.form['password']
 
             # Validate credentials and perform login logic using the database
-            user = session.query(User).filter_by(username=session['username'], password=password).first()
+            user = User.query.filter_by(username=session['username'], password=password).first()
             if user:
                 return redirect(url_for('userpage'))
 
     # Retrieve random courses and saved courses from the database
-    r_results = session.query(Course).all()
-    s_results = session.query(Course).all()
+    r_results = Course.query.all()
+    s_results = Course.query.all()
 
     return render_template('index.html', r_courses=r_results, s_courses=s_results)
 
@@ -71,7 +68,7 @@ def index():
 def userpage():
     if 'username' in session:
         username = session['username']
-        r_results = session.query(Course).all()
+        r_results = Course.query.all()
         return render_template('User_page.html', username=username, r_courses=r_results)
     else:
         return redirect(url_for('index'))
@@ -87,7 +84,7 @@ def logout():
 def search():
     query = request.args.get('query', '')
 
-    search_results = session.query(Course).filter(Course.title.ilike(f'%{query}%')).all()
+    search_results = Course.query.filter(Course.title.ilike(f'%{query}%')).all()
 
     return jsonify(results=[{
         'title': course.title,
@@ -99,5 +96,3 @@ def search():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
