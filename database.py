@@ -16,7 +16,18 @@ engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_
                            }
                        })
 
+def load_courses():
+    courses = []
+    with engine.connect() as conn:
+        results = conn.execute(text("SELECT * FROM courses"))
 
-with engine.connect() as conn2:
-    results = conn2.execute(text("SELECT * FROM courses"))
-    print(results.fetchall())
+        for course in results.fetchall():
+            courses.append(course)
+    return courses
+
+#print(load_courses())
+
+
+
+
+
