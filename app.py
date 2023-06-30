@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_sqlalchemy import SQLAlchemy
 import creds
 
+db = SQLAlchemy()
 app = Flask(__name__)
 app.secret_key = '123'
 
@@ -11,8 +12,8 @@ db_host = creds.db_host
 db_name = creds.database
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_username}:{db_password}@{db_host}/{db_name}?ssl_ca=/etc/ssl/cert.pem'
-db = SQLAlchemy(app)
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://txar7yilyoeym9t1k46y:pscale_pw_GYXq5xGssPe43jaIRoF4eBdNteM4tGnpsBne6BUe8tK@aws.connect.psdb.cloud/connecttocourse?ssl_ca=/etc/ssl/cert.pem'
+db.init_app(app)
 
 
 class User(db.Model):
