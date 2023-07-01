@@ -55,7 +55,7 @@ def add_user_details(username, password, email):
 
 #print(load_courses())
 #print(check_user_login("mub", "123"))
-#add_user_details("mubarak", "123", "ade@gmail.com")
+#add_user_details("mubex", "123", "mubex@gmail.com")
 #print(load_users())
 
 

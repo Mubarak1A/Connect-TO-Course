@@ -123,26 +123,14 @@
 
 <!-- Generate 10 random courses -->
 <div class="result"><h3>Random Courses</h3>
-	<div>
-		{% for course in courses %}
-			<div>
-				<img src='../static/images/udemy.jpeg'>
-				<a href='{{course[2]}}'>{{course[1]}}</a> <br> By: {{course[3]}}
-			</div>
-			<br> <hr> <br>
-		{% endfor %}
-	</div>
-</div>
-<br>
-
 <div class="container">
-	{% for result in r_courses %}
+	{% for course in courses %}
 	<div class="flex-item3">
-		<img src="static/images/img2.png" style="width: 100%;">
-		<b>{{ result.title }}</b>
-		<br><i style="font-size: 0.8em">{{ result.instructor }}</i><br>
-		<button><a href='{{ result.url }}'>Visit</a></button>
-		<button><a href='{{ result.url }}'>Save</a></button>
+		<img src='../static/images/udemy.jpeg'>
+		<b>{{course[1]}}</b>
+		<br><i style="font-size: 0.8em">{{course[3]}}</i><br>
+		<button><a href='{{course[2]}}'>Visit</a></button>
+		<button><a href='{{course[2]}}'>Save</a></button>
 	</div>
 	{% endfor %}
 </div>
