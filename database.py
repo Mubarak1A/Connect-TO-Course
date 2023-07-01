@@ -46,9 +46,17 @@ def check_user_login(username, passwd):
     else:
         return False
 
+def add_user_details(username, password, email):
+    """add user details to database"""
+    with engine.connect() as conn:
+        query = text("INSERT INTO users (username, email, passwd) VALUES (:username, :email, :passwd)")
+        result = conn.execute(query, {"username": username, "email": email, "passwd": password})
+        print("User Details Added Successfully!")
 
 #print(load_courses())
 #print(check_user_login("mub", "123"))
+#add_user_details("mubarak", "123", "ade@gmail.com")
+#print(load_users())
 
 
 
