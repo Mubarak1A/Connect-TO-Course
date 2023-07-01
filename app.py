@@ -1,13 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import database
 import functionalties
 import creds
 from datetime import timedelta
-
+import api_fetch
 
 app = Flask (__name__)
 app.secret_key = creds.app_key
 app.permanent_session_lifetime = timedelta(minutes=5)
+
+courses_list = api_fetch.assemble_data()
+titles = api_fetch.get_titles()
+courses_dict = {course['title']: course for course in courses_list}
+saved_courses = []
+
 
 courses = database.load_courses()
 users = database.load_users()
@@ -48,6 +54,17 @@ def index():
     return render_template("index.html",                                              courses=random_courses)
 
 
+@app.route('/search' , methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+    search_results = []
+
+    search_titles = functionalties.search_courses(titles, query)
+    courses = [courses_dict[title] for title in search_titles if title in courses_dict.keys()]
+    for course in courses:
+        search_results.append(course)
+
+    return jsonify(results=search_results)
 
 
 if __name__ == "__main__":
