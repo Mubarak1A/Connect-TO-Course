@@ -45,7 +45,7 @@ def index():
             flash("Already Loggged In!")
             return redirect(url_for('user_page', courses=random_courses))
 
-    return users
+    return render_template("index.html",                                              courses=random_courses)
 
 
 
