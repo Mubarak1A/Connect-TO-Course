@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """The console"""
 import cmd
-import api_fetch
+import fetch_api_db
 import functionalties
 #from datetime import datetime
 #import shlex  # for splitting the line along spaces except in double quotes
