@@ -17,6 +17,7 @@ engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}".format(db_username, db_
                        })
 
 def load_courses():
+    """load all courses from database"""
     courses = []
     with engine.connect() as conn:
         results = conn.execute(text("SELECT * FROM courses"))
@@ -25,8 +26,29 @@ def load_courses():
             courses.append(course)
     return courses
 
-#print(load_courses())
+def load_users():
+    """load users from database"""
+    users = []
+    with engine.connect() as conn:
+        results = conn.execute(text("SELECT * FROM users"))
 
+        for user in results.fetchall():
+            users.append(user)
+    return users
+
+def check_user_login(username, passwd):
+    """check if user details in database"""
+    users = load_users()
+
+    for user in users:
+        if user[1] == username and user[2] == passwd:
+            return True
+    else:
+        return False
+
+
+#print(load_courses())
+#print(check_user_login("mub", "123"))
 
 
 
