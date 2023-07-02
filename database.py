@@ -58,6 +58,3 @@ def add_user_details(username, password, email):
 #add_user_details("mubex", "123", "mubex@gmail.com")
 #print(load_users())
 
-
-
-
