@@ -29,8 +29,8 @@ $(document).ready(function() {
             var resultHtml =
               '<div class="flex-item3">' + '<img src="static/images/img2.png" style="width: 100%;">' +
               '<b>' + result.title + '</b>' +
-              '<br><i style="font-size: 0.8em;">' + result.instructor + '</i>' +
-	      '<br><button><a href="' + result.url + '">Visit</a></button>' +
+              '<i style="font-size: 0.7em;">' + result.instructor + '</i>' +
+	      '<br><button>' + '<a href='  + result.URL + '>' + 'Visit</a></button>' +
 	      ' ' + '<button name=' + result.course_id + '><a href="#">Save</a></button>' + 
               '</div>';
 

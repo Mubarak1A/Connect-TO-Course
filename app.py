@@ -3,9 +3,10 @@ import os
 from models import User, Course
 import database
 import fetch_api_db
+
 import functionalties
-#from database import courses
-  
+
+
 app = Flask(__name__)
 
 app.secret_key = '123'

@@ -128,9 +128,9 @@
 <div class="container">
 	{% for result in r_courses %}
 	<div class="flex-item3">
-		<img src="static/images/img2.png" style="width: 100%;">
-		<a href='{{ result.url }}' target='_blank'><b style="display: block;">{{ result.title }} </b></a>
-		<br><i style="font-size: 0.8em">{{ result.instructor }}</i><br>
+		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
+		<b> {{ result.title }} </b>
+		<i> {{ result.instructor }}  </i><br>
 		<button><a href='{{ result.course_id }}'>Save</a></button>
 	</div>
 	{% endfor %}
