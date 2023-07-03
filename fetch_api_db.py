@@ -9,7 +9,7 @@ def get_urls():
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names/course-instructor/course-url"
 
     headers = {
-        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Key": creds.api_key,
         "X-RapidAPI-Host": creds.api_host
     }
 
@@ -30,7 +30,7 @@ def get_instructors():
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names/course-instructor"
 
     headers = {
-        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Key": creds.api_key,
         "X-RapidAPI-Host": creds.api_host
     }
     response = requests.get(url, headers=headers)
@@ -49,7 +49,7 @@ def get_titles():
     url = "https://udemy-course-scrapper-api.p.rapidapi.com/course-names"
 
     headers = {
-        "X-RapidAPI-Key": creds.key,
+        "X-RapidAPI-Key": creds.api_key,
         "X-RapidAPI-Host": creds.api_host
     }
 

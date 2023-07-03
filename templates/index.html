@@ -71,7 +71,10 @@
                 <p style="font-size: 16px;">Create an account for free.</p>
                 <hr>
                 <label for="username"><b>Username</b></label>
-                <input type="text" placeholder="Enter Email" name="username" required>
+                <input type="text" placeholder="Enter Username" name="username" required>
+
+		<label for="email"><b>Email</b></label>
+		<input type="text" placeholder="Enter Email" name="email" required>
 
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="password" required>
@@ -126,10 +129,9 @@
 	{% for result in r_courses %}
 	<div class="flex-item3">
 		<img src="static/images/img2.png" style="width: 100%;">
-		<b>{{ result.title }}</b>
+		<a href='{{ result.url }}' target='_blank'><b style="display: block;">{{ result.title }} </b></a>
 		<br><i style="font-size: 0.8em">{{ result.instructor }}</i><br>
-		<button><a href='{{ result.url }}'>Visit</a></button>
-		<button><a href='{{ result.url }}'>Save</a></button>
+		<button><a href='{{ result.course_id }}'>Save</a></button>
 	</div>
 	{% endfor %}
 </div>

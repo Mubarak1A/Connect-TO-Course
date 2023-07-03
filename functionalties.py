@@ -2,7 +2,6 @@
 """"Module that contain all functionalies of the all"""
 
 import random
-import api_fetch
 
 def generate_courses(courses_list):
     """generate random course"""
