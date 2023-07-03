@@ -41,7 +41,7 @@ def check_user_login(username, passwd):
     users = load_users()
 
     for user in users:
-        if user[1] == username and user[2] == passwd:
+        if user[1] == username and user[3] == passwd:
             return True
     else:
         return False

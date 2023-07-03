@@ -29,7 +29,7 @@
 <!--Modal Log in form -->
 
 <div id="f1" class="modal">
-        <form class="modal-content animate" action="/user_page" method="POST">
+        <form class="modal-content animate" action="/" method="POST">
                 <div class="closecontainer">
                         <span onclick="document.getElementById('f1').style.display='none'" class="close" title="Close Modal">&times;</span>
                 </div>
@@ -74,7 +74,7 @@
                 <input type="text" placeholder="Enter Username" name="username" required>
 
 		<label for="email"><b>Email</b></label>
-                <input type="email" placeholder="Enter your Email" name="email" required>
+		<input type="text" placeholder="Enter Email" name="email" required>
 
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="password" required>
@@ -122,15 +122,16 @@
 <div class="container" id="search-results"> </div>
 
 <!-- Generate 10 random courses -->
-<div class="result"><h3>Random Courses</h3>
+<div class="result"><h3>Random Courses</h3></div>
+<br>
+
 <div class="container">
-	{% for course in courses %}
+	{% for result in r_courses %}
 	<div class="flex-item3">
-		<img src='../static/images/udemy.jpeg'>
-		<b>{{course[1]}}</b>
-		<br><i style="font-size: 0.8em">{{course[3]}}</i><br>
-		<button><a href='{{course[2]}}'>Visit</a></button>
-		<button><a href='{{course[2]}}'>Save</a></button>
+		<img src="static/images/img2.png" style="width: 100%;">
+		<a href='{{ result.url }}' target='_blank'><b style="display: block;">{{ result.title }} </b></a>
+		<br><i style="font-size: 0.8em">{{ result.instructor }}</i><br>
+		<button><a href='{{ result.course_id }}'>Save</a></button>
 	</div>
 	{% endfor %}
 </div>
