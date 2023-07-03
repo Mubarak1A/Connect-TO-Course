@@ -35,7 +35,6 @@
 		<div><b style="color: white; font-size: 0.6em;">{{ result.title }}</b></div>
 		<div><i style="font-size: 0.4em; color: white">{{ result.instructor }}</i></div>
 	</div>
-	{% endfor %}
 
 </div>-->
 
@@ -66,6 +65,26 @@
 <div class="result" id="result-head"><h3></h3></div>
 <div class="container" id="search-results"> </div>
 
-<!-- Generate 10 random courses -->                        <div class="result"><h3>Random Courses</h3>                <div class="container">                                            {% for course in courses %}                                <div class="flex-item3">                                           <img src='../static/images/udemy.jpeg'>
-                <b>{{course[1]}}</b>                                       <br><i style="font-size: 0.8em">{{course[3]}}</i><br>                                                                 <button><a href='{{course[2]}}'>Visit</a></button>                                                                    <button><a href='{{course[2]}}'>Save</a></button>                                                             </div>                                                     {% endfor %}
-</div>                                                                                                                <br>                                                       <br><br><br>                                               <br>                                                         <footer>&copy 2023</footer>                                                                                         </body>                                                    </html>                                                    ~
+<!-- Generate 10 random courses -->
+<div class="result"><h3>Random Courses</h3></div>
+<br>
+
+<div class="container">
+	{% for result in r_courses %}
+	<div class="flex-item3">
+		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
+		<b> {{ result.title }} </b>
+		<i> {{ result.instructor }}  </i><br>
+		<button><a href='{{course[2]}}'>Visit</a></button>
+		<button><a href='{{ result.course_id }}'>Save</a></button>
+	</div>
+	{% endfor %}
+</div>
+
+<br>
+<br><br><br>
+<br>
+  <footer>&copy 2023</footer>
+
+</body>
+</html>

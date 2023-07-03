@@ -3,7 +3,6 @@ import os
 from models import User, Course
 import database
 import fetch_api_db
-
 import functionalties
 
 

@@ -82,6 +82,7 @@ def assemble_data():
     return courses
 
 #courses_data = assemble_data()
+#print(courses_data)
 
 #fetch the datas in the cloud databse
 #with engine.connect() as conn:
