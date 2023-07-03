@@ -26,6 +26,7 @@ def index():
     if request.method == 'POST':
         if 'signupbtn' in request.form:
             session['username'] = request.form['username']
+            username = request.form['username']
             password = request.form['password']
             email = request.form['email']
 
