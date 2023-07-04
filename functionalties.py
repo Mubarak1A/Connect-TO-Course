@@ -8,7 +8,7 @@ def generate_courses(courses_list):
     random_courses = []
     count = 0
     while len(random_courses) < 10:
-       course = random.choice(courses_list)
+        course = random.choice(courses_list)
         if  course not in random_courses:
             random_courses.append(course)
         count += 1
