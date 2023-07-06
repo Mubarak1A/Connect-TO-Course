@@ -1,3 +1,4 @@
+//To retrieve course search results from the server
 $(document).ready(function() {
   // Function to handle the search form submission
   $('.search-container').submit(function(event) {
@@ -31,7 +32,7 @@ $(document).ready(function() {
               '<b>' + result.title + '</b>' +
               '<i style="font-size: 0.7em;">' + result.instructor + '</i>' +
 	      '<br><button>' + '<a href='  + result.URL + '>' + 'Visit</a></button>' +
-	      ' ' + '<button name=' + result.course_id + '><a href="#">Save</a></button>' + 
+	      ' ' + '<button class="savebtn">Save</button>' + 
               '</div>';
 
             $('#search-results').append(resultHtml);
@@ -46,4 +47,40 @@ $(document).ready(function() {
       }
     });
   });
+
+
+
+
+//For save/bookmark
+
+// Check the current page and apply different behaviors
+if (window.location.pathname === "/") {
+  // Behavior for index.html page random courses
+  $(".savebtn").on("click", function() {
+    // Trigger the click event of signup button
+    $("#f2").show();
+  });
+  // For searched courses
+ $('#search-results').on('click', '.savebtn', function() {
+  $("#f2").show();
+});
+} else if (window.location.pathname === "/user") {
+  // Behavior for User_page.html
+  $("#save").on("click", function() {
+    // Send a request to the server
+    $.ajax({
+      url: "/save",
+      method: "POST",
+      success: function(response) {
+        // Handle the response from the Flask server
+        console.log("Request sent to Flask server");
+      },
+      error: function(xhr, status, error) {
+        // Handle the error
+        console.error("Error sending request to Flask server");
+      }
+    });
+  });
+}
+
 });
