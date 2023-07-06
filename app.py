@@ -50,7 +50,7 @@ def index():
             else:
                 flash("Invalid Login Details!")
                 return redirect(url_for('index'))
-    
+
     return render_template('index.html', r_courses=r_results, s_courses=r_results)
 
 
