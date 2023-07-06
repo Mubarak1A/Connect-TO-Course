@@ -31,10 +31,10 @@
 	<p style="color: white; text-align: left-align; padding-left: 32px;">Bookmark</p>
 	<!-- Saved Courses for the user comes in here -->
 	{% for result in r_courses %}
-	<div id="bookmark" style="border: 1px solid blue; width: 70%; margin-left: 17px; margin-bottom: 10px;">
+	<div id="bookmark">
                 <a href='{{ result.url }}'><img src="static/images/img2.png" style="width: 100%;"></a>
-		<div><b style="color: white; font-size: 0.6em;">{{ result.title }}</b></div>
-		<div><i style="font-size: 0.4em; color: white">{{ result.instructor }}</i></div>
+		<b style="color: white; font-size: 0.6em;">{{ result.title }}</b>
+		<i style="font-size: 0.4em; color: white"> By: {{ result.instructor }}</i>
 	</div>
 	{% endfor %}
 
@@ -75,9 +75,9 @@
 	<div class="flex-item3">
 		<img src="static/images/img2.png" style="width: 100%;">
 		<b>{{ result.title }}</b>
-		<i>{{ result.instructor }}</i><br>
+		<i>By: {{ result.instructor }}</i><br>
 		<button><a href='{{ result.url }}'>Visit</a></button>
-		<button name="{{ result.course_id }}"><a href='{{ result.url }}'>Save</a></button>
+		<button name="{{ result.url }}">Save</button>
 	</div>
         {% endfor %}
 </div>

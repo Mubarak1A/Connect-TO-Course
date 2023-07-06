@@ -87,5 +87,15 @@ def search():
     return jsonify(results=search_results)
 
 
+@app.route('/save' , methods=['GET'])
+def save():
+    if request.args.get('name'):
+        query = request.args.get('name', '')
+        #Save the course for the user
+
+    #update the bookmark and return it to user page.
+    return jsonify(results=saved_courses)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

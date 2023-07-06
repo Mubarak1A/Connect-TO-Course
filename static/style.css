@@ -231,7 +231,7 @@ div.psw {
 	text-decoration: none;
 }
 
-.flex-item3 b {
+.flex-item3 b, #bookmark b {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -241,10 +241,21 @@ div.psw {
 	font-size: 0.8em;
 	padding: 0;
 }
-.flex-item3 i {
-        text-overflow: ellipsis;
-	overflow: hidden;
+.flex-item3 i, #bookmark i {
+	/*display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         white-space: nowrap;
+        text-decoration: none;
+        font-size: 0.7em;
+        padding-top: 8px;
+	margin-bottom:0;*/
+        white-space: nowrap;
+	display: inline-block;
+	overflow: hidden;
+	max-width: 10em;
+	text-overflow: ellipsis;
 	font-size: 0.7em;
 	padding-top: 8px;
 }
@@ -325,6 +336,13 @@ form.search-container::after {
 
 #main {
 	transition: margin-left 0.5s;
+}
+
+#bookmark {
+	border: 1px solid blue;
+	width: 70%;
+	margin-left: 17px;
+	margin-bottom: 10px;
 }
 
 @media screen and (max-height: 450px) {

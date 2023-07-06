@@ -130,8 +130,8 @@
 	<div class="flex-item3">
 		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
 		<b> {{ result.title }} </b>
-		<i> {{ result.instructor }}  </i><br>
-		<button class="savebtn">Save</button>
+		<i>By: {{ result.instructor }}  </i><br>
+		<button class="savebtn" name='{{ result.url }}'>Save</button>
 	</div>
 	{% endfor %}
 </div>

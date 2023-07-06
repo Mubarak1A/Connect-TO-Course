@@ -30,9 +30,9 @@ $(document).ready(function() {
             var resultHtml =
               '<div class="flex-item3">' + '<img src="static/images/img2.png" style="width: 100%;">' +
               '<b>' + result.title + '</b>' +
-              '<i style="font-size: 0.7em;">' + result.instructor + '</i>' +
+              '<i style="font-size: 0.7em;">By: ' + result.instructor + '</i>' +
 	      '<br><button>' + '<a href='  + result.URL + '>' + 'Visit</a></button>' +
-	      ' ' + '<button class="savebtn">Save</button>' + 
+	      ' ' + '<button class="savebtn" name=' + result.URL + '>Save</button>' + 
               '</div>';
 
             $('#search-results').append(resultHtml);
@@ -67,10 +67,12 @@ if (window.location.pathname === "/") {
 } else if (window.location.pathname === "/user") {
   // Behavior for User_page.html
   $("#save").on("click", function() {
-    // Send a request to the server
+    // Send a request, url as name, to the server
+    var buttonName = $(this).attr("name");
     $.ajax({
       url: "/save",
       method: "POST",
+      data: { name: buttonName},
       success: function(response) {
         // Handle the response from the Flask server
         console.log("Request sent to Flask server");
