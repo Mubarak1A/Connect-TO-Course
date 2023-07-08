@@ -32,7 +32,7 @@ $(document).ready(function() {
               '<b>' + result.title + '</b>' +
               '<i style="font-size: 0.7em;">By: ' + result.instructor + '</i>' +
 	      '<br>' +
-	      ' ' + '<button class="savebtn" name=' + result.URL + '>Save</button>' + 
+	      ' ' + '<button class="savebtn" name=' + result.URL + '><i class="fas fa-save"></i> Save</button>' + 
               '</div>';
 
             $('#search-results').append(resultHtml);

@@ -220,15 +220,15 @@ div.psw {
 	margin: auto;
 	border: 1px solid #1E90FF;
 	overflow: hidden;
-	
 }
 
 .flex-item3 button {
-	background-color: #82CAFF;
+	background-color: #2196f3;
+	width: 25%;
 	color: white;
 	cursor: pointer;
 	border: none;
-	text-decoration: none;
+	font-size: 0.6em;
 }
 
 .flex-item3 b, #bookmark b {
