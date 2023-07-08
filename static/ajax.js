@@ -28,10 +28,10 @@ $(document).ready(function() {
           for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultHtml =
-              '<div class="flex-item3">' + '<img src="static/images/img2.png" style="width: 100%;">' +
+              '<div class="flex-item3">' + '<a href='  + result.URL + ' target="_blank">' + '<img src="static/images/img2.png" style="width: 100%;"></a>' +
               '<b>' + result.title + '</b>' +
               '<i style="font-size: 0.7em;">By: ' + result.instructor + '</i>' +
-	      '<br><button>' + '<a href='  + result.URL + '>' + 'Visit</a></button>' +
+	      '<br>' +
 	      ' ' + '<button class="savebtn" name=' + result.URL + '>Save</button>' + 
               '</div>';
 

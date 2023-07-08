@@ -32,7 +32,7 @@
 	<!-- Saved Courses for the user comes in here -->
 	{% for result in r_courses %}
 	<div id="bookmark">
-                <a href='{{ result.url }}'><img src="static/images/img2.png" style="width: 100%;"></a>
+                <a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
 		<b style="color: white; font-size: 0.6em;">{{ result.title }}</b>
 		<i style="font-size: 0.4em; color: white"> By: {{ result.instructor }}</i>
 	</div>
@@ -48,7 +48,7 @@
 
 <div class="container"> 
 	<div class="flex-item1" style="padding-left: auto;"><h1  style="margin-top: 0px;">Learn everything in a place</h1>
-		<p>Seach for courses, get an up-to-date online courses and bookmark your prefered or choiced courses for free.</p>
+		<p>Seach for courses, get an up-to-date online courses and bookmark your preferred or choiced courses for free.</p>
 	</div>	
 	<div class="flex-item1">
 		<div class="flex-item2">
@@ -73,10 +73,9 @@
 <div class="container">
 	{% for result in r_courses %}
 	<div class="flex-item3">
-		<img src="static/images/img2.png" style="width: 100%;">
+		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
 		<b>{{ result.title }}</b>
 		<i>By: {{ result.instructor }}</i><br>
-		<button><a href='{{ result.url }}'>Visit</a></button>
 		<button name="{{ result.url }}">Save</button>
 	</div>
         {% endfor %}

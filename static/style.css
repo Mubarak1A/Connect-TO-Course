@@ -242,15 +242,6 @@ div.psw {
 	padding: 0;
 }
 .flex-item3 i, #bookmark i {
-	/*display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        white-space: nowrap;
-        text-decoration: none;
-        font-size: 0.7em;
-        padding-top: 8px;
-	margin-bottom:0;*/
         white-space: nowrap;
 	display: inline-block;
 	overflow: hidden;
