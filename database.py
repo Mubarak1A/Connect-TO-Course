@@ -36,6 +36,36 @@ def load_users():
             users.append(user)
     return users
 
+def load_bookmark(user_id):
+    """load all user saved courses"""
+    with engine.connect() as conn:
+        results = conn.execute(text("SELECT bookmark FROM users WHERE id = {}".format(user_id)))
+    bookmark_courses = results.fetchone()[0]
+    if bookmark_courses:
+        bookmark_list = [int(id) for id in bookmark_courses.split(" ")]
+    else:
+        bookmark_list = []
+
+    return bookmark_list
+
+def save_course(user_id, course_id):
+    """save/bookmark course by storing the id"""
+        bookmark_list = load_bookmark(user_id)
+
+        if course_id not in bookmark_list:
+                bookmark_list.append(course_id)
+
+        new_bookmark = " ".join(str(id) for id in bookmark_list)
+
+    with engine.connect() as conn2:
+        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".format(new_bookmark, user_id)))
+
+    return 0
+
+ids = load_bookmark(1)
+print(ids)
+
+
 def check_user_login(username, passwd):
     """check if user details in database"""
     users = load_users()
@@ -57,4 +87,5 @@ def add_user_details(username, password, email):
 #print(check_user_login("mub", "123"))
 #add_user_details("mubex", "123", "mubex@gmail.com")
 #print(load_users())
+
 
