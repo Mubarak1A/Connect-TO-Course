@@ -97,5 +97,10 @@ def save():
     return jsonify(results=saved_courses)
 
 
+@app.route('/landing_page', methods=['POST'])
+def landingPage();
+    return render_template('landing_page.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
