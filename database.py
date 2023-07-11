@@ -50,21 +50,29 @@ def load_bookmark(user_id):
 
 def save_course(user_id, course_id):
     """save/bookmark course by storing the id"""
-        bookmark_list = load_bookmark(user_id)
+    bookmark_list = load_bookmark(user_id)
 
-        if course_id not in bookmark_list:
-                bookmark_list.append(course_id)
+    if course_id not in bookmark_list:
+        bookmark_list.append(course_id)
 
-        new_bookmark = " ".join(str(id) for id in bookmark_list)
+    new_bookmark = " ".join(str(id) for id in bookmark_list)
 
     with engine.connect() as conn2:
         conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".format(new_bookmark, user_id)))
 
     return 0
 
-ids = load_bookmark(1)
-print(ids)
+def delete_bookmark(user_id, course_id):
+    """delete a particular id course from bookmark"""
+    bookmark_list = load_bookmark(user_id)
 
+    if course_id in bookmark_list:
+        bookmark_list.pop(bookmark_list.index(course_id))
+    new_bookmark = " ".join(str(id) for id in bookmark_list)
+    with engine.connect() as conn2:
+        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".format(new_bookmark, user_id)))
+
+    return 0
 
 def check_user_login(username, passwd):
     """check if user details in database"""
