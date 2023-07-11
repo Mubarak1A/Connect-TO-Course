@@ -97,8 +97,8 @@ def save():
     return jsonify(results=saved_courses)
 
 
-@app.route('/landing_page', methods=['POST'])
-def landingPage();
+@app.route('/landing_page', methods=['GET'])
+def landingPage():
     return render_template('landing_page.html')
 
 
