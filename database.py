@@ -36,17 +36,43 @@ def load_users():
             users.append(user)
     return users
 
+
 def load_bookmark(user_id):
-    """load all user saved courses"""
+    """load all user saved courses_id"""
     with engine.connect() as conn:
         results = conn.execute(text("SELECT bookmark FROM users WHERE id = {}".format(user_id)))
     bookmark_courses = results.fetchone()[0]
     if bookmark_courses:
-        bookmark_list = [int(id) for id in bookmark_courses.split(" ")]
+        bookmark_ids = [int(id) for id in bookmark_courses.split(" ")]
     else:
-        bookmark_list = []
+        bookmark_ids = []
+    
+    return (bookmark_ids)
 
-    return bookmark_list
+
+def load_bookmark_list(user_id):
+    """load the saved courses"""
+    bookmark_ids = load_bookmark(user_id)
+    #load all courses
+    all_courses = load_courses()
+
+    filtered_courses_list = [
+        course for course in all_courses if course.id in bookmark_ids
+    ]
+    filtered_courses = [
+        {
+            'id': course[0],
+            'title': course[1],
+            'url': course[2],
+            'instructor': course[3]
+        }
+        for course in filtered_courses_list
+    ]
+
+    return (filtered_courses)
+
+    
+
 
 def save_course(user_id, course_id):
     """save/bookmark course by storing the id"""
@@ -62,7 +88,7 @@ def save_course(user_id, course_id):
 
     return 0
 
-def delete_bookmark(user_id, course_id):
+def delete_bookmark_not(user_id, course_id):
     """delete a particular id course from bookmark"""
     bookmark_list = load_bookmark(user_id)
 
@@ -74,13 +100,32 @@ def delete_bookmark(user_id, course_id):
 
     return 0
 
+
+
+def delete_bookmark(user_id, course_id):
+    """Delete a particular course id from bookmark"""
+    bookmark_list = load_bookmark(user_id)
+
+    if course_id in bookmark_list:
+        bookmark_list.remove(course_id)
+    new_bookmark = " ".join(str(id) for id in bookmark_list)
+    
+    with engine.connect() as conn2:
+        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".
+                           format(new_bookmark, user_id)))
+
+    return 0
+
+
+
+
 def check_user_login(username, passwd):
     """check if user details in database"""
     users = load_users()
 
     for user in users:
         if user[1] == username and user[3] == passwd:
-            return True
+            return user[0]
     else:
         return False
 

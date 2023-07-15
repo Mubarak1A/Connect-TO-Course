@@ -14,8 +14,8 @@ def generate_courses(courses_list):
         count += 1
     return random_courses
 
-
-def search_courses(courses_list, search_str):
+#Not working, you can debug. I put not.
+def search_courses_not(courses_list, search_str):
     """search for course related to search string
        return list of searches
     """
@@ -31,6 +31,26 @@ def search_courses(courses_list, search_str):
             searches = searches
 
     return searches
+
+
+#Working search function
+def search_courses(courses_list, search_str):
+    """search for course related to search string and 
+       return list of searches
+    """
+    matched_courses = []
+    for course in courses_list:
+        course_title = course[1].lower()
+        if search_str.lower() in course_title:
+            matched_courses.append(course)
+
+    #Convert to json.
+    courses_data = [
+            {'id': course.id, 'title': course.title, 'url': course.url, 'instructor': course.instructor}
+            for course in matched_courses
+    ]
+    return courses_data
+
 
 
 def save_course(course):
