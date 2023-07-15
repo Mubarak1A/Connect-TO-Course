@@ -35,7 +35,7 @@
 	<div id="bookmark">
                 <a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
 		<b style="color: white; font-size: 0.6em;">{{ result.title }}</b>
-		<i style="font-size: 0.4em; color: white"> By: {{ result.instructor }}</i><button class="delete" data-id="{{ result.id }}" data-user_id="{{ user_id }}"> <i class="far fa-trash-alt" style="float: right; color: #eee; font-size: 0.5em;"></i></button>
+		<i style="font-size: 0.4em; color: white"> By: {{ result.instructor }}</i><span class="delete" data-id="{{ result.id }}" data-user_id="{{ user_id }}"> <i class="far fa-trash-alt" style="float: right; color: #eee; font-size: 0.5em;"></i></span>
 	</div>
 	{% endfor %}
 

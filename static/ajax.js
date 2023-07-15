@@ -31,7 +31,7 @@ $(document).ready(function() {
               '<b>' + result.title + '</b>' +
               '<i style="font-size: 0.7em;">By: ' + result.instructor + '</i>' +
 	      '<br>' +
-	      ' ' + '<button class="savebtn" data-id="' + result.id + '"  ' +  'data-user_id="{{ user_id }}">' +  '<i class="fas fa-save"></i> Save</button>' + 
+	      ' ' + '<button class="savebtn" data-id="' + result.id  + '" data-user_id="{{ user_id }}">' +  '<i class="fas fa-save"></i> Save</button>' + 
               '</div>';
 
             $('#search-results').append(resultHtml);
@@ -46,7 +46,6 @@ $(document).ready(function() {
       }
     });
   });
-
 
 
 
@@ -85,24 +84,24 @@ if (window.location.pathname === "/") {
   }); 
 
 
-$(".delete").on("click", function() {
-  var id = $(this).attr("data-id");
-  var user_id = $(this).attr("data-user_id");
-  $.ajax({
-   url: "/delete",
-   method: "POST",
-   data: JSON.stringify({id: id, user_id: user_id}),
+ //$(".delete").on("click", function() {
+  //var id = $(this).attr("data-id");
+  //var user_id = $(this).attr("data-user_id");
+  //$.ajax({
+   //url: "/delete",
+   //method: "POST",
+   //data: JSON.stringify({id: id, user_id: user_id}),
    //contentType: "application/json",
-   success: function(response) {
-    Handle the response from the Flask server
-	console.log("Request sent to Flask server");
-	},
-       error: function(xhr, status, error) {
-	 Handle the error
-        console.error("Error sending request to Flask server");
-      }
-    });
-  });
+   //success: function(response) {
+    //Handle the response from the Flask server
+	//console.log("Request sent to Flask server");
+	//},
+       //error: function(xhr, status, error) {
+	 //Handle the error
+        //console.error("Error sending request to Flask server");
+      //}
+    //});
+  //});
 }
 
 });
