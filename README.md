@@ -17,7 +17,7 @@ Connect-to-Course is a project that tends to solve the problem of going to diffe
 For now the project only get courses from udemy and tends to expand its scope with time. This MVP is developed in 2weeks as a portfolio project for full stack web development of Alx-SE foundation course.
 
 # Installation
-Does not require any installation. The website can be found at <a href="connect-to-course.onrender.com">connect-to-course.onrender.com</a>
+Does not require any installation. The website can be found at <a href="https://connect-to-course.onrender.com">connect-to-course.onrender.com</a>
 
 # Usage
 This project has a user-friendly graphical user interface which enable it to be easy to use.
