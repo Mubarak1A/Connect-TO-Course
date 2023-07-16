@@ -6,7 +6,11 @@ class User:
         self.password = password
 
 class Course:
-    def __init__(self, title, content):
+    def __init__(self, id, title, url, instructor):
+        self.id = id
         self.title = title
-        self.content = content
-        self.created_at = datetime.now()
+        self.url = url
+        self.instructor = instructor
+
+    def __str__(self):
+        return f"course_id: {self.id}, title: {self.title}, url: {self.url}, instructor: {self.instructor}"

@@ -136,9 +136,3 @@ def add_user_details(username, password, email):
         result = conn.execute(query, {"username": username, "email": email, "passwd": password})
         print("User Details Added Successfully!")
 
-#print(load_courses())
-#print(check_user_login("mub", "123"))
-#add_user_details("mubex", "123", "mubex@gmail.com")
-#print(load_users())
-
-

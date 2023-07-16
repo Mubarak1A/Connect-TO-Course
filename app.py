@@ -110,6 +110,13 @@ def delete():
     app.logger.info("Route /delete triggered")
     return redirect(url_for('userpage'))
 
+@app.route('/courses_api')
+def list_courses():
+    courses_list = [dict(course._asdict()) for course in courses]
+
+    return jsonify(courses_list)
+
+
 
 @app.route('/landing_page', methods=['GET'])
 def landingPage():
