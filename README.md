@@ -12,10 +12,12 @@ A comprehensive and intuitive platform where users can explore, compare, and cho
   - Contact
 
 # Project Overview
-A comprehensive platform to to search and get online courses from different source.
+Connect-to-Course is a project that tends to solve the problem of going to different online platforms to learn. It helps to bring all your learning on a platform. This project was initiated to help learners search for courses online and save the courses they intend to learn on a singular platform. With this, they can focus on learning, when they have saved all the courses they intend to learn to improve on or start their carreer.
+
+For now the project only get courses from udemy and tends to expand its scope with time. This MVP is developed in 2weeks as a portfolio project for full stack web development of Alx-SE foundation course.
 
 # Installation
-Does not require any installation. The website can be found at connect-to-course.onrender.com
+Does not require any installation. The website can be found at <a href="connect-to-course.onrender.com">connect-to-course.onrender.com</a>
 
 # Usage
 This project has a user-friendly graphical user interface which enable it to be easy to use.
