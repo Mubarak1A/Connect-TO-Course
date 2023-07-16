@@ -103,6 +103,26 @@ if (window.location.pathname === "/") {
 	}
 	});
       });
+
+  //Delete functionalty
+  $(".delete").on("click", function() {
+    var id = $(this).attr("data-id");
+    var user_id = $(this).attr("data-user_id");
+    $.ajax({
+      url: "/delete",
+      method: "POST",
+      data: JSON.stringify({id: id, user_id: user_id}),
+      success: function(response) {
+        //Handle response from the Flask server.
+	console.log("Request sent to Flask server");
+      },
+      error: function(xhr, status, error) {
+	//Handle the error
+	console.error("Error sending request to Flask server");
+      }
+    });
+   });
+    
  }
 
 });

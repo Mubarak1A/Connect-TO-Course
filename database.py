@@ -88,18 +88,6 @@ def save_course(user_id, course_id):
 
     return 0
 
-def delete_bookmark_not(user_id, course_id):
-    """delete a particular id course from bookmark"""
-    bookmark_list = load_bookmark(user_id)
-
-    if course_id in bookmark_list:
-        bookmark_list.pop(bookmark_list.index(course_id))
-    new_bookmark = " ".join(str(id) for id in bookmark_list)
-    with engine.connect() as conn2:
-        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".format(new_bookmark, user_id)))
-
-    return 0
-
 
 
 def delete_bookmark(user_id, course_id):
@@ -111,11 +99,9 @@ def delete_bookmark(user_id, course_id):
     new_bookmark = " ".join(str(id) for id in bookmark_list)
     
     with engine.connect() as conn2:
-        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".
-                           format(new_bookmark, user_id)))
+        conn2.execute(text("UPDATE users SET bookmark = '{}' WHERE id = {}".format(new_bookmark, user_id)))
 
     return 0
-
 
 
 

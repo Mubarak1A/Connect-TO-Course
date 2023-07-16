@@ -10,7 +10,7 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	background-color: #82CAFF; 
+	background-color: #E3F2FD;/*#82CAFF;*/ 
 }
 
 header {
@@ -233,7 +233,7 @@ div.psw {
 	font-size: 0.6em;
 }
 
-.flex-item3 b, #bookmark b {
+.flex-item3 b, .bookmark b {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -243,7 +243,7 @@ div.psw {
 	font-size: 0.8em;
 	padding: 0;
 }
-.flex-item3 i, #bookmark i {
+.flex-item3 i, .bookmark i {
         white-space: nowrap;
 	display: inline-block;
 	overflow: hidden;
@@ -327,17 +327,22 @@ form.search-container::after {
 	padding: 8px;
 }
 
-.delete {
-    border: none;
-    background-color: #fff;
-    outline: none;
+.delete i {
+    cursor: pointer;
+    color: #eee;
+    float: right;
+    font-size: 0.5em;
+}
+
+.delete i:hover {
+	color: #AD3245;
 }
 
 #main {
 	transition: margin-left 0.5s;
 }
 
-#bookmark {
+.bookmark {
 	border: 1px solid blue;
 	width: 70%;
 	margin-left: 17px;
