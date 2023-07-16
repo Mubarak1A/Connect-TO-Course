@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="static/style.css">
 <script src='https://kit.fontawesome.com/a9534c06e2.js' crossorigin='anonymous'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<input type="hidden" id="user-id" value="undefined">
 <script src="static/ajax.js"></script>
 <script src="static/script.js"></script>
 </head>
@@ -23,8 +24,8 @@
         </span>
 </header>
 
-<hr>
-
+<br>
+<br><br><br><br><br>
 
 
 <!--Modal Log in form -->
@@ -132,7 +133,7 @@
 	{% for result in random_courses %}
 	<div class="flex-item3">
 		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
-		<b> {{ result.title }} </b>
+		<b>{{ result.title }}</b>
 		<i>By: {{ result.instructor }}  </i><br>
 		<button class="savebtn" name='{{ result.url }}'> <i class="fas fa-save"></i> Save</button>
 	</div>
@@ -143,7 +144,9 @@
 <br>
 <br><br><br>
 <br>
-  <footer>&copy 2023</footer>
+  <footer>
+	  <a href='https://github.com/Mubarak1A/Connect-TO-Course'><i class='fa fa-github'></i>   Connect-to-Course  </a>	
+  </footer>
 
 </body>
 </html>

@@ -10,10 +10,12 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	background-color: #E3F2FD;/*#82CAFF;*/ 
 }
 
 header {
-	/*position: fixed;*/
+	background-color: #0C243C;
+	position: fixed;
 	color: #1E90FF;
 	font-size: 1.5em;
 	padding: 15px;
@@ -204,7 +206,6 @@ div.psw {
 	max-width: 100%;
 	flex: 0 0 30em;
 	padding: 0 1% 0 1%;
-	background-color: white;
 	font-size: 1em;
 	min-height: 25vh;
 }
@@ -220,6 +221,7 @@ div.psw {
 	margin: auto;
 	border: 1px solid #1E90FF;
 	overflow: hidden;
+	/*box-shadow: 5px 10px 10px pink;*/
 }
 
 .flex-item3 button {
@@ -231,7 +233,7 @@ div.psw {
 	font-size: 0.6em;
 }
 
-.flex-item3 b, #bookmark b {
+.flex-item3 b, .bookmark b {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -241,7 +243,7 @@ div.psw {
 	font-size: 0.8em;
 	padding: 0;
 }
-.flex-item3 i, #bookmark i {
+.flex-item3 i, .bookmark i {
         white-space: nowrap;
 	display: inline-block;
 	overflow: hidden;
@@ -297,7 +299,7 @@ form.search-container::after {
 	z-index: 1;
 	top: 0;
 	left: 0;
-	background-color: #333;
+	background-color: #0C243C;
 	overflow-x: hidden;
 	padding-top: 60px;
 	transition: 0.5s;
@@ -325,17 +327,22 @@ form.search-container::after {
 	padding: 8px;
 }
 
-.delete {
-    border: none;
-    background-color: #fff;
-    outline: none;
+.delete i {
+    cursor: pointer;
+    color: #eee;
+    float: right;
+    font-size: 0.5em;
+}
+
+.delete i:hover {
+	color: #AD3245;
 }
 
 #main {
 	transition: margin-left 0.5s;
 }
 
-#bookmark {
+.bookmark {
 	border: 1px solid blue;
 	width: 70%;
 	margin-left: 17px;
@@ -353,9 +360,14 @@ footer {
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	background-color: #82CAFF; /*#2196f3*/
+	background-color: #0C243C;
 	width:100%;
 	text-align: center;
 	padding:20px;
+	font-size: 0.8em;
+	color: white;
+}
+footer a {
+	text-decoration: none;
 	color: white;
 }

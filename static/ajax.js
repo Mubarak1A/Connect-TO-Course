@@ -25,13 +25,15 @@ $(document).ready(function() {
 
         if (searchResults.length > 0) {
           for (var i = 0; i < searchResults.length; i++) {
-            var result = searchResults[i];
+            //make user_id available as ajax can not render template
+	    var userId = document.getElementById('user-id').value;
+	    var result = searchResults[i];
             var resultHtml =
               '<div class="flex-item3">' + '<a href='  + result.url + ' target="_blank">' + '<img src="static/images/img2.png" style="width: 100%;"></a>' +
               '<b>' + result.title + '</b>' +
               '<i style="font-size: 0.7em;">By: ' + result.instructor + '</i>' +
 	      '<br>' +
-	      ' ' + '<button class="savebtn" data-id="' + result.id  + '" data-user_id="{{ user_id }}">' +  '<i class="fas fa-save"></i> Save</button>' + 
+	      ' ' + '<button class="savebtn" data-id="' + result.id  + '" data-user_id="' + userId + '"><i class="fas fa-save"></i> Save</button>'  + 
               '</div>';
 
             $('#search-results').append(resultHtml);
@@ -81,27 +83,67 @@ if (window.location.pathname === "/") {
         console.error("Error sending request to Flask server");
       }
     });
-  }); 
+  });
+  //For searched courses
+  $('#search-results').on('click', '.savebtn', function() {
+    //send request to server
+    var id = $(this).attr("data-id");
+    var user_id = $(this).attr("data-user_id");
+    $.ajax({
+      url: "/save",
+      method: "POST",
+      data: JSON.stringify({id: id, user_id: user_id}),
+      success: function(response) {
+      // Handle the response from the Flask server
+      console.log("Request sent to Flask server");
+      },
+      error: function(xhr, status, error) {
+	// Handle the error
+	console.error("Error sending request to Flask server");
+	}
+	});
+      });
 
-
- //$(".delete").on("click", function() {
-  //var id = $(this).attr("data-id");
-  //var user_id = $(this).attr("data-user_id");
-  //$.ajax({
-   //url: "/delete",
-   //method: "POST",
-   //data: JSON.stringify({id: id, user_id: user_id}),
-   //contentType: "application/json",
-   //success: function(response) {
-    //Handle the response from the Flask server
-	//console.log("Request sent to Flask server");
-	//},
-       //error: function(xhr, status, error) {
-	 //Handle the error
-        //console.error("Error sending request to Flask server");
-      //}
-    //});
-  //});
-}
+  //Delete functionalty
+  $(".delete").on("click", function() {
+    var id = $(this).attr("data-id");
+    var user_id = $(this).attr("data-user_id");
+    $.ajax({
+      url: "/delete",
+      method: "POST",
+      data: JSON.stringify({id: id, user_id: user_id}),
+      success: function(response) {
+        //Handle response from the Flask server.
+	console.log("Request sent to Flask server");
+      },
+      error: function(xhr, status, error) {
+	//Handle the error
+	console.error("Error sending request to Flask server");
+      }
+    });
+   });
+    
+ }
 
 });
+
+/*
+ $(".delete").on("click", function() {
+  var id = $(this).attr("data-id");
+  var user_id = $(this).attr("data-user_id");
+  $.ajax({
+	  url: "/delete",
+	  method: "POST",
+	  data: JSON.stringify({id: id, user_id: user_id}),
+	  contentType: "application/json",
+	  success: function(response) {
+	  Handle the response from the Flask server
+		  console.log("Request sent to Flask server");
+	  },
+	  error: function(xhr, status, error) {
+		  //Handle the error
+		  console.error("Error sending request to Flask server");
+	  }
+  });
+ });
+ */

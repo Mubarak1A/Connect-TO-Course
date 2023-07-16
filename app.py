@@ -92,13 +92,12 @@ def save():
     
     #app.logger.info("Route /save triggered")
     #update the bookmark and return courses to the user page.
-    #saved_courses=database.load_bookmark_list(user_id)
     #return jsonify(results=saved_courses)
 
     return redirect(url_for('userpage'))
 
 
-@app.route('/delete', methods=['POST'])
+@app.route("/delete", methods=['POST'])
 def delete():
     #Retrieve the course url and username.
     data = request.get_json(force=True)
@@ -106,8 +105,9 @@ def delete():
     user_id = data.get('user_id')
     
     #delete course
+    app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
     database.delete_bookmark(user_id, course_id)
-    app.logger.info("Route /delete triggered")
+
     return redirect(url_for('userpage'))
 
 @app.route('/courses_api')
@@ -124,4 +124,4 @@ def landingPage():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
