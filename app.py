@@ -90,10 +90,7 @@ def save():
     #Save the course id to the database
     database.save_course(user_id, course_id)
     
-    #app.logger.info("Route /save triggered")
-    #update the bookmark and return courses to the user page.
     #return jsonify(results=saved_courses)
-
     return redirect(url_for('userpage'))
 
 
@@ -105,7 +102,7 @@ def delete():
     user_id = data.get('user_id')
     
     #delete course
-    app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
+    #app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
     database.delete_bookmark(user_id, course_id)
 
     return redirect(url_for('userpage'))
