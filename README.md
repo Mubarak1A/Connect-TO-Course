@@ -25,7 +25,7 @@ This project has a user-friendly graphical user interface which enable it to be 
 # Features
   - User Authentication (Signup and Login)
   - Generate Random Courses for Users
-  - Seearch Function
+  - Search Function
   - Bookmark Function
   - A Restful API
 
