@@ -19,7 +19,7 @@
 <body>
 <header>
 	<span class="btn-grp">
-		<form action="{{ 'logout' }}" method="POST"><a href="/"><button type="button" class="btn" name="logoutbtn">Log Out</button></a></form>
+		<form action="{{ url_for('logout') }}" method="POST"><button type="submit" id='logout' class="btn" name="logoutbtn">Log Out</button></form>
 	</span><span>Connect to Course</span>
 
 	<span style="cursor: pointer; float: left;" onclick="openNav()">&#9776;</span>
@@ -46,13 +46,13 @@
 <!-- End of Sidenav -->
 
 
-<!-- Flash message modal -->
+<!-- Flash message modal-->
   {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
       <div class="flash-modal">
         <div class="flash-modal-content">
           {% for category, message in messages %}
-            {% if category == 'success' %}
+            {% if category == 'login' %}
               <div class="flash-message flash-success">{{ message }}</div>
             {% endif %}
           {% endfor %}
@@ -60,7 +60,8 @@
       </div>
     {% endif %}
   {% endwith %}
-<!-- End of flash message template-->
+<!--End of flash message template-->
+
 
 
 <div id="main">
