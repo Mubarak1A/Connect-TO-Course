@@ -44,7 +44,8 @@
                         <input type="text" placeholder="Enter Username" name="username" required>
 
                         <label for="password"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="password" required>                                                        
+                        <input type="password" placeholder="Enter Password" name="password" required>
+
 			<label style="margin-bottom:15px; font-size: 18px;"><input type="checkbox" checked="checked" name="remember">Remember me</label><br>
                         <div style="text-align: center"><button type="submit" class="logbtn" name="loginbtn">Login</button></div>
 
@@ -98,6 +99,23 @@
 </div>
 
 <!-- End of Sign up form -->
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div class="flash-modal">
+        <div class="flash-modal-content">
+          {% for category, message in messages %}
+            {% if category == 'success' %}
+              <div class="flash-message flash-success">{{ message }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+    {% endif %}
+  {% endwith %}
+  
+  <!-- End of flash message template -->
+
 
 
 <div id="main">

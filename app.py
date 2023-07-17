@@ -25,8 +25,8 @@ def index():
             # Create a new user in the database
             database.add_user_details(username, password, email)
 
-            flash("Signup Successful!")
-            flash("You can proceed to Login.")
+            flash("Sign up Successful!", "success")
+            flash("You can proceed to Login.", "success")
             return redirect(url_for('index'))
 
         elif 'loginbtn' in request.form:
@@ -37,11 +37,11 @@ def index():
 
             # Validate credentials and perform login logic.
             if database.check_user_login(username, password):
-                flash('Login Successful!')
+                flash('Login Successful!', 'success')
                 user_id=database.check_user_login(username, password)
                 return redirect(url_for('userpage'))
             else:
-                flash("Invalid Login Details!")
+                flash("Invalid Login Details!", "failure")
                 return redirect(url_for('index'))
 
     return render_template('index.html', random_courses=random_courses)
@@ -64,6 +64,7 @@ def userpage():
 def logout():
     # Clear the user session
     session.clear()
+    flash("Logout  Successful!", "success")
     return redirect(url_for('index'))
 
 
@@ -89,7 +90,8 @@ def save():
 
     #Save the course id to the database
     database.save_course(user_id, course_id)
-    
+
+    flash("Course is Successfully Saved!", "success")
     #return jsonify(results=saved_courses)
     return redirect(url_for('userpage'))
 
@@ -105,8 +107,8 @@ def delete():
     #app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
     database.delete_bookmark(user_id, course_id)
 
+    flash("Course is Successfully deleted!", "success")
     return redirect(url_for('userpage'))
-
 @app.route('/courses_api')
 def list_courses():
     courses_list = [dict(course._asdict()) for course in courses]
