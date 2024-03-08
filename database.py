@@ -9,7 +9,7 @@ db_password = creds.passwd
 db_host = creds.db_host
 db_name = creds.database
 
-engine = create_engine("mysql://{0}:{1}@{2}/{3}".format(db_username, db_password, db_host, db_name)
+engine = create_engine("mysql://{0}:{1}@{2}/{3}".format(db_username, db_password, db_host, db_name))
 
 def load_courses():
     """load all courses from database"""
