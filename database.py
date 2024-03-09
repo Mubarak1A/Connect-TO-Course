@@ -2,7 +2,7 @@
 """Database module to connect to the cloud database"""
 
 from sqlalchemy.orm import sessionmaker
-from model import User, Course, engine
+from models import User, Course, engine
 
 # Create a Session class to interact with the database
 Session = sessionmaker(bind=engine)
