@@ -17,3 +17,4 @@ urllib3==2.0.3
 Werkzeug==2.2.3
 gunicorn
 psycopg2
+psycopg2-binary
