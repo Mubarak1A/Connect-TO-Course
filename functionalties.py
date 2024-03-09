@@ -5,6 +5,9 @@ import random
 
 def generate_courses(courses_list):
     """generate random course"""
+    if not courses_list:
+        return []
+    
     random_courses = []
     count = 0
     while len(random_courses) < 10:
