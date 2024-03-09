@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
+import creds
 
 Base = declarative_base()
 
@@ -23,6 +24,10 @@ class Course(Base):
         return f"course_id: {self.id}, title: {self.title}, url: {self.url}, instructor: {self.instructor}"
 
 # Db Connection
+db_username = creds.username
+db_password = creds.passwd
+db_host = creds.db_host
+db_name = creds.database
 
-engine = create_engine("postgresql://your_username:your_password@localhost/your_database")
+engine = create_engine(f"postgresql://{db_username}:{db_password}@{db_host}/{db_name}")
 Base.metadata.create_all(engine)
