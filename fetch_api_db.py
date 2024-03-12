@@ -84,13 +84,38 @@ def assemble_data():
 #courses_data = assemble_data()
 #print(courses_data)
 
-#fetch the datas in the cloud databse
+#fetch the datas in the rapid api to app db
 #with engine.connect() as conn:
 #    for course in courses_data:
 #        title = course["title"]
 #        url = course["URL"]
 #        instructor = course["instructor"]
+#        counter = 1
 #
 #        query = text("INSERT INTO courses (title, url, instructor) VALUES (:title, :url, :instructor)")
-#        result = conn.execute(query, {"title": title, "url": url, "instructor": instructor})
-#        print("Insert successful!")
+#        try:
+#            conn.execute(query, {"title": title, "url": url, "instructor": instructor})
+#            print(f"Insert successful!", counter)
+#        except Exception as e:
+#            print(f"Error inserting data: {e}")
+#
+#        counter += 1
+#
+#    conn.commit()
+#
+#    print("All Insert successful!")
+
+#fetch data from app db
+#with engine.connect() as conn:
+#   query = text("SELECT title, url, instructor FROM courses")
+#    
+#    result = conn.execute(query)
+#
+#    rows = result.fetchall()
+#    
+#    for row in rows:
+#       title = row[0]
+#        url = row[1]
+#       instructor = row[2]
+#
+#        print(f"Title: {title}, URL: {url}, Instructor: {instructor}")
