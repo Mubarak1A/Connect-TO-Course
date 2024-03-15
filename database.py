@@ -16,6 +16,11 @@ def load_users():
     """Load all users from the database"""
     return session.query(User).all()
 
+def get_user(user_id):
+    """Retrieve user information from the database by user ID"""
+    return session.query(User).get(user_id)
+    
+
 def load_bookmark(user_id):
     """Load all user saved courses_id"""
     user = session.query(User).get(user_id)
