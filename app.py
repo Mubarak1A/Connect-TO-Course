@@ -8,11 +8,11 @@ import functionalties
 app = Flask(__name__)
 
 app.secret_key = '123'
-username = 'Elizabeth'
 
 courses = database.load_courses()
 saved_courses = []
 random_courses = functionalties.generate_courses(courses)
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -30,15 +30,14 @@ def index():
             return redirect(url_for('index'))
 
         elif 'loginbtn' in request.form:
-            session['username'] = request.form['username']
-            session['password'] = request.form['password']
             username = request.form['username']
             password = request.form['password']
 
             # Validate credentials and perform login logic.
-            if database.check_user_login(username, password):
+            user = database.check_user_login(username, password)
+            if user:
+                session['user_id'] = user.id  # Store only user_id in session
                 flash('Login Successful!', 'login')
-                user_id=database.check_user_login(username, password)
                 return redirect(url_for('userpage'))
             else:
                 flash("Invalid Login Details!", "failure")
@@ -49,13 +48,14 @@ def index():
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
-    if 'username' in session and 'password' in session:
-        username = session['username']
-        password = session['password']
-        user_id = database.check_user_login(username, password)
-        saved_courses=database.load_bookmark_list(user_id)
-
-        return render_template('User_page.html', username=username, random_courses=random_courses, saved_courses=saved_courses, user_id=user_id)
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = database.get_user(user_id)  # Retrieve user information from database
+        if user:
+            saved_courses=database.load_bookmark_list(user_id)
+            return render_template('User_page.html', username=user.username, random_courses=random_courses, saved_courses=saved_courses, user_id=user_id)
+        else:
+            return redirect(url_for('index'))  # Invalidate session if user not found
     else:
         return redirect(url_for('index'))
 
