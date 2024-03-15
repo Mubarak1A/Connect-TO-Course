@@ -81,7 +81,7 @@ def delete_bookmark(user_id, course_id):
 def check_user_login(username, passwd):
     """Check if user details in the database"""
     user = session.query(User).filter_by(username=username, password=passwd).first()
-    return user
+    return user.id if user else false
 
 def add_user_details(username, password, email):
     """Add user details to the database"""
