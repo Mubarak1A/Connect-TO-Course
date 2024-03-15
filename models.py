@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 import creds
 
