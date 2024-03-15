@@ -46,6 +46,7 @@ def index():
     return render_template('index.html', random_courses=random_courses)
 
 
+
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
     if 'user_id' in session:
