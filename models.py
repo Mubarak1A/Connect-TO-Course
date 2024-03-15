@@ -11,6 +11,13 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
+    bookmark = Column(Text, default="[]")
+    
+    def get_bookmark(self):
+        return json.loads(self.bookmark)
+    
+    def set_bookmark(self, bookmark):
+        self.bookmark = json.dumps(bookmark)
 
 class Course(Base):
     __tablename__ = 'courses'
