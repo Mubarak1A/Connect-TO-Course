@@ -1,6 +1,4 @@
-#!/usr/bin/python3
-"""Database module to connect to the cloud database"""
-
+import json
 from sqlalchemy.orm import sessionmaker
 from models import User, Course, engine
 
@@ -19,16 +17,14 @@ def load_users():
 def get_user(user_id):
     """Retrieve user information from the database by user ID"""
     return session.query(User).get(user_id)
-    
 
 def load_bookmark(user_id):
     """Load all user saved courses_id"""
     user = session.query(User).get(user_id)
     if user:
-        bookmark_ids = [int(id) for id in user.bookmark.split(" ") if id]
+        return user.get_bookmark()  # Use get_bookmark method
     else:
-        bookmark_ids = []
-    return bookmark_ids
+        return []
 
 def load_bookmark_list(user_id):
     """Load the saved courses"""
@@ -54,34 +50,33 @@ def save_course(user_id, course_id):
     """Save/bookmark course by storing the id"""
     user = session.query(User).get(user_id)
     if user:
-        bookmark_ids = [int(id) for id in user.bookmark.split(" ") if id]
+        bookmark_ids = user.get_bookmark()  # Use get_bookmark method
     else:
         bookmark_ids = []
 
     if course_id not in bookmark_ids:
         bookmark_ids.append(course_id)
 
-    user.bookmark = " ".join(str(id) for id in bookmark_ids)
+    user.set_bookmark(bookmark_ids)  # Use set_bookmark method
     session.commit()
 
 def delete_bookmark(user_id, course_id):
     """Delete a particular course id from bookmark"""
     user = session.query(User).get(user_id)
     if user:
-        bookmark_ids = [int(id) for id in user.bookmark.split(" ") if id]
+        bookmark_ids = user.get_bookmark()  # Use get_bookmark method
     else:
         bookmark_ids = []
 
     if course_id in bookmark_ids:
         bookmark_ids.remove(course_id)
 
-    user.bookmark = " ".join(str(id) for id in bookmark_ids)
+    user.set_bookmark(bookmark_ids)  # Use set_bookmark method
     session.commit()
 
 def check_user_login(username, passwd):
     """Check if user details in the database"""
-    user = session.query(User).filter_by(username=username, password=passwd).first()
-    return user
+    return session.query(User).filter_by(username=username, password=passwd).first()
 
 def add_user_details(username, password, email):
     """Add user details to the database"""
