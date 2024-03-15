@@ -29,5 +29,8 @@ db_password = creds.passwd
 db_host = creds.db_host
 db_name = creds.database
 
-engine = create_engine(f"postgresql://{db_username}:{db_password}@{db_host}/{db_name}")
+engine = create_engine(
+    f"postgresql://{db_username}:{db_password}@{db_host}/{db_name}",
+    connect_args={"sslmode": "require"}
+)
 Base.metadata.create_all(engine)
