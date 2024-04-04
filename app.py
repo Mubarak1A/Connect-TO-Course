@@ -96,17 +96,20 @@ def save():
 
 @app.route("/delete", methods=['POST'])
 def delete():
-    #Retrieve the course url and username.
+    # Retrieve the course url and username.
     data = request.get_json(force=True)
     course_id = data.get('id')
     user_id = data.get('user_id')
     
-    #delete course
-    #app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
+    # Delete the bookmark
     database.delete_bookmark(user_id, course_id)
 
-    return redirect(url_for('userpage'))
+    # Retrieve the updated list of bookmarked courses
+    saved_courses = database.load_bookmark_list(user_id)
 
+    # Return the updated list as JSON
+    return jsonify(saved_courses=saved_courses)
+            
 
 @app.route('/courses_api')
 def list_courses():
