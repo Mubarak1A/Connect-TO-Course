@@ -27,24 +27,22 @@ def load_bookmark(user_id):
         return []
 
 def load_bookmark_list(user_id):
-    """Load the saved courses"""
+    """Load the saved courses with complete information"""
     bookmark_ids = load_bookmark(user_id)
-    all_courses = load_courses()
+    bookmarked_courses = session.query(Course).filter(Course.id.in_(bookmark_ids)).all()
 
-    filtered_courses_list = [
-        course for course in all_courses if course.id in bookmark_ids
-    ]
-    filtered_courses = [
+    # Convert bookmarked courses to a list of dictionaries
+    bookmarked_courses_data = [
         {
             'id': course.id,
             'title': course.title,
             'url': course.url,
             'instructor': course.instructor
         }
-        for course in filtered_courses_list
+        for course in bookmarked_courses
     ]
 
-    return filtered_courses
+    return bookmarked_courses_data
 
 def save_course(user_id, course_id):
     """Save/bookmark course by storing the id"""
