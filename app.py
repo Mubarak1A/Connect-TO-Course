@@ -53,13 +53,12 @@ def userpage():
         user_id = session['user_id']
         user = database.get_user(user_id)  # Retrieve user information from database
         if user:
-            saved_courses=database.load_bookmark_list(user_id)
+            saved_courses = database.load_bookmark_list(user_id)
             return render_template('User_page.html', username=user.username, random_courses=random_courses, saved_courses=saved_courses, user_id=user_id)
         else:
             return redirect(url_for('index'))  # Invalidate session if user not found
     else:
         return redirect(url_for('index'))
-
 
 @app.route("/logout", methods=['POST'])
 def logout():
