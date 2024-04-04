@@ -30,18 +30,19 @@
 <!-- Sidenav for Courses Bookmark -->
 
 <div id="bookmark_container" class="sidenav">
-	<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-	<p style="color: white; text-align: left-align; padding-left: 32px;">Bookmark</p>
-	<!-- Saved Courses for the user comes in here -->
-	{% for result in saved_courses %}
-	<div class="bookmark">
-                <a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
-		<b style="color: white; font-size: 0.6em;">{{ result.title }}</b>
-		<i style="font-size: 0.4em; color: white"> By: {{ result.instructor }}</i><span class="delete" data-id="{{ result.id }}" data-user_id="{{ user_id }}"> <i class="far fa-trash-alt"></i></span>
-	</div>
-	{% endfor %}
-
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p style="color: white; text-align: left-align; padding-left: 32px;">Bookmark</p>
+    <!-- Saved Courses for the user comes in here -->
+    {% for course in saved_courses %}
+    <div class="bookmark">
+        <a href='{{ course.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
+        <b style="color: white; font-size: 0.6em;">{{ course.title }}</b>
+        <i style="font-size: 0.4em; color: white"> By: {{ course.instructor }}</i>
+        <span class="delete" data-id="{{ course.id }}" data-user_id="{{ user_id }}"> <i class="far fa-trash-alt"></i></span>
+    </div>
+    {% endfor %}
 </div>
+
 
 <!-- End of Sidenav -->
 
