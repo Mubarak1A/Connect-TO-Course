@@ -104,27 +104,36 @@ if (window.location.pathname === "/") {
 	});
       });
 
-  //Delete functionalty
-  $(".delete").on("click", function() {
-    var id = $(this).attr("data-id");
-    var user_id = $(this).attr("data-user_id");
-    $.ajax({
-      url: "/delete",
-      method: "POST",
-      data: JSON.stringify({id: id, user_id: user_id}),
-      success: function(response) {
-        //Handle response from the Flask server.
-	console.log("Request sent to Flask server");
-      },
-      error: function(xhr, status, error) {
-	//Handle the error
-	console.error("Error sending request to Flask server");
-      }
-    });
-   });
+  // Delete bookmark
+$('.delete').on('click', function() {
+    var courseId = $(this).data('id');
+    var userId = $(this).data('user_id');
     
- }
-
+    $.ajax({
+        type: 'POST',
+        url: '/delete',
+        contentType: 'application/json',
+        data: JSON.stringify({ id: courseId, user_id: userId }),
+        success: function(response) {
+            // Update the UI with the updated list of bookmarked courses
+            $('#bookmark_container').empty();
+            response.saved_courses.forEach(function(course) {
+                $('#bookmark_container').append(
+                    '<div class="bookmark">' +
+                        '<a href="' + course.url + '" target="_blank"><img src="static/images/img2.png" style="width: 100%;"></a>' +
+                        '<b style="color: white; font-size: 0.6em;">' + course.title + '</b>' +
+                        '<i style="font-size: 0.4em; color: white"> By: ' + course.instructor + '</i>' +
+                        '<span class="delete" data-id="' + course.id + '" data-user_id="' + userId + '"> <i class="far fa-trash-alt"></i></span>' +
+                    '</div>'
+                );
+            });
+        },
+        error: function(error) {
+            console.log('Error deleting bookmark:', error);
+        }
+    });
+});
+	    
 });
 
 /*
