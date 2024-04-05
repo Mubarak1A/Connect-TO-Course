@@ -18,26 +18,24 @@ def generate_courses(courses_list):
     return random_courses
 
 #Not working, you can debug. I put not.
-def search_courses_not(courses_list, search_str):
-    """search for course related to search string
-       return list of searches
-    """
-    searches = []
+def search_courses(courses_list, search_str):
+    """Search for courses related to the search string and return a list of searches."""
+    matched_courses = []
     for course in courses_list:
-        if all(item in [x.upper() for x in course.split(" ")]
-               for item in [x.upper() for x in search_str.split(" ")]):
-            searches.append(course)
-        elif any(item in [x.upper() for x in course.split(" ")]
-               for item in [x.upper() for x in search_str.split(" ")]):
-            searches.append(course)
-        else:
-            searches = searches
+        course_title = course['title'].lower()  # Accessing the 'title' attribute of the course
+        if search_str.lower() in course_title:
+            matched_courses.append(course)
 
-    return searches
+    # Convert to JSON format.
+    courses_data = [
+        {'id': course['id'], 'title': course['title'], 'url': course['url'], 'instructor': course['instructor']}
+        for course in matched_courses
+    ]
+    return courses_data
 
 
 #Working search function
-def search_courses(courses_list, search_str):
+def search_courses_not(courses_list, search_str):
     """search for course related to search string and 
        return list of searches
     """
