@@ -28,6 +28,29 @@
 <br><br><br><br><br>
 
 
+<!-- Flash message modal-->
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="flash-modal">
+      <div class="flash-modal-content">
+        {% for category, message in messages %}
+          {% if category == 'signup' %}
+            <div class="flash-message flash-success">{{ message }}</div>
+          {% elif category == 'login' %}
+            <div class="flash-message flash-success">{{ message }}</div>
+          {% elif category == 'failure' %}
+            <div class="flash-message flash-danger">{{ message }}</div>
+          {% elif category == 'warning' %}
+            <div class="flash-message flash-warning">{{ message }}</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}
+<!--End of flash message template-->
+
+
 <!--Modal Log in form -->
 
 <div id="f1" class="modal">
