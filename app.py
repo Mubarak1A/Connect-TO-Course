@@ -11,11 +11,11 @@ app.secret_key = '123'
 
 courses = database.load_courses()
 saved_courses = []
-random_courses = functionalties.generate_courses(courses)
 
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    random_courses = functionalties.generate_courses(courses)
     if request.method == 'POST':
         if 'signupbtn' in request.form:
             username = request.form['username']
@@ -49,6 +49,7 @@ def index():
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
+    random_courses = functionalties.generate_courses(courses)
     if 'user_id' in session:
         user_id = session['user_id']
         user = database.get_user(user_id)  # Retrieve user information from database
