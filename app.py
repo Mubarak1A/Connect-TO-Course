@@ -56,6 +56,7 @@ def userpage():
             saved_courses = database.load_bookmark_list(user_id)
             return render_template('User_page.html', username=user.username, random_courses=random_courses, saved_courses=saved_courses, user_id=user_id)
         else:
+            flash("Please login to access this page!", "warning")
             return redirect(url_for('index'))  # Invalidate session if user not found
     else:
         return redirect(url_for('index'))
