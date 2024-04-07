@@ -22,13 +22,13 @@ def search_courses(courses_list, search_str):
     """Search for courses related to the search string and return a list of searches."""
     matched_courses = []
     for course in courses_list:
-        course_title = course['title'].lower()  # Accessing the 'title' attribute of the course
+        course_title = course.title.lower()  # Accessing the 'title' attribute of the course
         if search_str.lower() in course_title:
             matched_courses.append(course)
 
     # Convert to JSON format.
     courses_data = [
-        {'id': course['id'], 'title': course['title'], 'url': course['url'], 'instructor': course['instructor']}
+        {'id': course.id, 'title': course.title, 'url': course.url, 'instructor': course.instructor}
         for course in matched_courses
     ]
     return courses_data
