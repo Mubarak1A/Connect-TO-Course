@@ -112,7 +112,12 @@ def delete():
 
 @app.route('/courses_api')
 def list_courses():
-    courses_list = [dict(course._asdict()) for course in courses]
+    courses_list = [{
+        "id" : course.id,
+        "title" : course.title.encode('utf-8').decode('cp1252', 'ignore'),
+        "url" : course.url.encode('utf-8').decode('cp1252', 'ignore'),
+        "instructor" : course.instructor.encode('utf-8').decode('cp1252', 'ignore')
+    } for course in courses]
 
     return jsonify(courses_list)
 
