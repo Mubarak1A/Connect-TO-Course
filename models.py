@@ -1,8 +1,8 @@
 from datetime import datetime
 import json
+import os
 from sqlalchemy import Column, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-import creds
 
 Base = declarative_base()
 
@@ -12,6 +12,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
+    email = Column(String, nullable=True)
     bookmark = Column(Text, default="[]")
     
     def get_bookmark(self):
@@ -31,14 +32,29 @@ class Course(Base):
     def __str__(self):
         return f"course_id: {self.id}, title: {self.title}, url: {self.url}, instructor: {self.instructor}"
 
-# Db Connection
-db_username = creds.username
-db_password = creds.passwd
-db_host = creds.db_host
-db_name = creds.database
+# Db Connection — all credentials from environment variables
+db_username = os.environ.get('DB_USERNAME')
+db_password = os.environ.get('DB_PASSWORD')
+db_host = os.environ.get('DB_HOST')
+db_name = os.environ.get('DB_NAME')
 
-engine = create_engine(
-    f"postgresql://{db_username}:{db_password}@{db_host}/{db_name}",
-    connect_args={"sslmode": "require"}
-)
+# Support full DATABASE_URL as well (Neon / Render provide this directly)
+database_url = os.environ.get('DATABASE_URL')
+
+if database_url:
+    # Neon and Render provide postgresql:// URLs; SQLAlchemy needs postgresql+psycopg2://
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql+psycopg2://', 1)
+    elif database_url.startswith('postgresql://'):
+        database_url = database_url.replace('postgresql://', 'postgresql+psycopg2://', 1)
+    engine = create_engine(
+        database_url,
+        connect_args={"sslmode": "require"}
+    )
+else:
+    engine = create_engine(
+        f"postgresql+psycopg2://{db_username}:{db_password}@{db_host}/{db_name}",
+        connect_args={"sslmode": "require"}
+    )
+
 Base.metadata.create_all(engine)

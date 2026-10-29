@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, g, flash
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import os
 from models import User, Course
 import database
@@ -7,14 +7,12 @@ import functionalties
 
 app = Flask(__name__)
 
-app.secret_key = '123'
-
-courses = database.load_courses()
-saved_courses = []
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-secret-change-in-prod')
 
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    courses = database.load_courses()
     random_courses = functionalties.generate_courses(courses)
     if request.method == 'POST':
         if 'signupbtn' in request.form:
@@ -49,6 +47,7 @@ def index():
 
 @app.route("/user", methods=['GET', 'POST'])
 def userpage():
+    courses = database.load_courses()
     random_courses = functionalties.generate_courses(courses)
     if 'user_id' in session:
         user_id = session['user_id']
@@ -69,58 +68,55 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/search' , methods=['GET'])
+@app.route('/search', methods=['GET'])
 def search():
-    #Get the query to search for
+    # Get the query to search for
     query = request.args.get('query', '')
 
-    #Load courses from database
+    # Load courses from database
     courses = database.load_courses()
 
-    #Search and return json
+    # Search and return json
     search_titles = functionalties.search_courses(courses, query)
     return jsonify(results=search_titles)
 
 
-@app.route('/save' , methods=['POST'])
+@app.route('/save', methods=['POST'])
 def save():
-    #Retrieve the course url and username.
+    # Retrieve the course url and username.
     data = request.get_json(force=True)
     course_id = data.get('id')
     user_id = data.get('user_id')
 
-    #Save the course id to the database
+    # Save the course id to the database
     database.save_course(user_id, course_id)
 
-    #return jsonify(results=saved_courses)
     return redirect(url_for('userpage'))
 
 
 @app.route("/delete", methods=['POST'])
 def delete():
-    #Retrieve the course url and username.
+    # Retrieve the course url and username.
     data = request.get_json(force=True)
     course_id = data.get('id')
     user_id = data.get('user_id')
-    
-    #delete course
-    #app.logger.info(f"Deleting bookmark for user_id: {user_id}, course_id: {course_id}")
+
     database.delete_bookmark(user_id, course_id)
 
     return redirect(url_for('userpage'))
-            
+
 
 @app.route('/courses_api')
 def list_courses():
+    courses = database.load_courses()
     courses_list = [{
-        "id" : course.id,
-        "title" : course.title.encode('utf-8').decode('cp1252', 'ignore'),
-        "url" : course.url.encode('utf-8').decode('cp1252', 'ignore'),
-        "instructor" : course.instructor.encode('utf-8').decode('cp1252', 'ignore')
+        "id": course.id,
+        "title": course.title,
+        "url": course.url,
+        "instructor": course.instructor
     } for course in courses]
 
     return jsonify(courses_list)
-
 
 
 @app.route('/landing_page', methods=['GET'])
