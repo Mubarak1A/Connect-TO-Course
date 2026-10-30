@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found | Connect to Course</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .error-container {
+      text-align: center;
+      padding: 120px 20px 40px;
+      color: #0C243C;
+    }
+    .error-code {
+      font-size: 5rem;
+      font-weight: bold;
+      color: #1E90FF;
+      margin: 0;
+    }
+    .error-message {
+      font-size: 1.5rem;
+      margin: 15px 0 25px;
+    }
+    .home-btn {
+      background-color: #1E90FF;
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-size: 1rem;
+      display: inline-block;
+      transition: opacity 0.2s;
+    }
+    .home-btn:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <header>Connect to Course</header>
+  <div class="error-container">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Oops! The page you're looking for doesn't exist.</h2>
+    <p style="color: #555; margin-bottom: 30px;">The link may be broken or the page may have been moved.</p>
+    <a href="{{ url_for('index') }}" class="home-btn">← Back to Home</a>
+  </div>
+</body>
+</html>
