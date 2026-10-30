@@ -122,12 +122,26 @@ def get_user_by_email(email):
         Session.remove()
 
 def check_user_login(username, passwd):
-    """Check user credentials — verifies against hashed password"""
+    """Check user credentials — supports both hashed and legacy plaintext with auto-upgrade"""
     session = Session()
     try:
         user = session.query(User).filter_by(username=username).first()
-        if user and check_password_hash(user.password, passwd):
+        if not user:
+            return None
+
+        # 1. Verify modern hashed password
+        try:
+            if check_password_hash(user.password, passwd):
+                return user
+        except (ValueError, TypeError):
+            pass
+
+        # 2. Backward compatibility: if existing password was plaintext, verify and auto-upgrade to hash
+        if user.password == passwd:
+            user.password = generate_password_hash(passwd)
+            session.commit()
             return user
+
         return None
     finally:
         Session.remove()

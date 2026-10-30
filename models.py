@@ -1,7 +1,7 @@
 from datetime import datetime
 import json
 import os
-from sqlalchemy import Column, Integer, String, Text, Boolean, create_engine
+from sqlalchemy import Column, Integer, String, Text, Boolean, create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 
 try:
@@ -65,3 +65,13 @@ else:
     )
 
 Base.metadata.create_all(engine)
+
+# Safely ensure newly added columns exist without modifying or deleting existing records
+try:
+    with engine.connect() as conn:
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;"))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS email VARCHAR;"))
+        conn.commit()
+except Exception as e:
+    # If using a dialect that does not support IF NOT EXISTS or table is newly created
+    pass
