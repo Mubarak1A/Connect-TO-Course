@@ -148,6 +148,12 @@ def delete():
     )
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint for Render and uptime monitoring"""
+    return jsonify(status="ok", service="connect-to-course"), 200
+
+
 @app.route('/courses_api')
 def list_courses():
     courses = database.load_courses()
