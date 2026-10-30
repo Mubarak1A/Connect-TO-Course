@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Connect to Course — Discover & Bookmark Top Online Courses{% endblock %}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://kit.fontawesome.com/a9534c06e2.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="{{ url_for('index') }}" class="brand-link">
+        <i class="fas fa-graduation-cap brand-icon"></i>
+        <span>Connect to Course</span>
+      </a>
+
+      <div class="nav-actions">
+        {% if session.get('user_id') %}
+          <button class="btn btn-bookmark-toggle" id="toggle-bookmarks-btn" onclick="toggleDrawer()">
+            <i class="fas fa-bookmark"></i>
+            <span>Bookmarks</span>
+            <span class="badge-count" id="nav-bookmark-count">{{ (saved_courses|length) if saved_courses is defined else 0 }}</span>
+          </button>
+
+          <a href="{{ url_for('userpage') }}" class="btn btn-outline">
+            <i class="fas fa-user-circle"></i>
+            <span>{{ username if username is defined else 'Dashboard' }}</span>
+          </a>
+
+          <form action="{{ url_for('logout') }}" method="POST" style="display:inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-outline" style="color: #FFA3AF; border-color: rgba(255,100,100,0.4);">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </button>
+          </form>
+        {% else %}
+          <button type="button" class="btn btn-outline" onclick="openModal('login-modal')">Log In</button>
+          <button type="button" class="btn btn-primary" onclick="openModal('signup-modal')">Sign Up</button>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Toast Notifications -->
+  <div class="toast-container" id="toast-container">
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="toast {% if category == 'signup' or category == 'login' %}toast-success{% elif category == 'failure' %}toast-danger{% else %}toast-warning{% endif %}">
+            <span>{{ message }}</span>
+            <i class="fas fa-times" style="cursor:pointer;" onclick="this.parentElement.remove()"></i>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Bookmark Drawer -->
+  <div id="bookmark_drawer" class="bookmark-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <i class="fas fa-bookmark" style="color: var(--primary);"></i>
+        <span>My Saved Courses</span>
+      </div>
+      <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+    <div class="drawer-body" id="drawer-bookmarks-list">
+      {% if saved_courses is defined and saved_courses %}
+        {% for course in saved_courses %}
+          <div class="bookmark-item" id="drawer-item-{{ course.id }}">
+            <a href="{{ course.url }}" target="_blank" class="bookmark-item-title">{{ course.title }}</a>
+            <div class="bookmark-item-instructor">By {{ course.instructor }}</div>
+            <button class="bookmark-item-delete" title="Remove bookmark" onclick="deleteBookmark('{{ course.id }}')">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="bookmark-empty" id="drawer-empty-msg">
+          <i class="far fa-bookmark"></i>
+          <p>No bookmarked courses yet.</p>
+          <p style="font-size:0.75rem; margin-top:4px;">Click the Bookmark button on any course to save it here!</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Content Block -->
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Welcome Back</h2>
+        <button class="modal-close" onclick="closeModal('login-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('index') }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label for="login-username">Username</label>
+            <input type="text" class="form-control" id="login-username" name="username" placeholder="Enter your username" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="form-btn-submit" name="loginbtn">Log In</button>
+          <p style="text-align:center; font-size:0.85rem; margin-top:16px; color:var(--text-muted);">
+            Don't have an account? <a href="#" style="color:var(--primary); font-weight:600;" onclick="switchModal('login-modal', 'signup-modal')">Sign up</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div id="signup-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Create an Account</h2>
+        <button class="modal-close" onclick="closeModal('signup-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('index') }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label for="signup-username">Username</label>
+            <input type="text" class="form-control" id="signup-username" name="username" placeholder="Choose a username" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <input type="email" class="form-control" id="signup-email" name="email" placeholder="name@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" class="form-control" id="signup-password" name="password" placeholder="Create a password" required>
+          </div>
+          <button type="submit" class="form-btn-submit" name="signupbtn">Sign Up for Free</button>
+          <p style="text-align:center; font-size:0.85rem; margin-top:16px; color:var(--text-muted);">
+            Already have an account? <a href="#" style="color:var(--primary); font-weight:600;" onclick="switchModal('signup-modal', 'login-modal')">Log in</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>
+      Connect to Course &copy; 2024 &bull; Built with Flask &amp; PostgreSQL &bull;
+      <a href="https://github.com/Mubarak1A/Connect-TO-Course" target="_blank"><i class="fab fa-github"></i> GitHub</a> &bull;
+      <a href="{{ url_for('list_courses') }}">API</a> &bull;
+      <a href="{{ url_for('landingPage') }}">About</a>
+    </p>
+  </footer>
+
+  <!-- App JavaScript -->
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

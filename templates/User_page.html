@@ -1,117 +1,136 @@
-<!DOCTYPE html>
-<html lang='en-US'>
-<head>
-<title>Connect to Course — My Account</title>
-<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-<meta charset="UTF-8">
-<meta name="description" content="connect to course">
-<meta name="author" name="Aluko and Mubarak">
-<meta name="keywords" content="free good best top online courses choice build career">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src='https://kit.fontawesome.com/a9534c06e2.js' crossorigin='anonymous'></script>
-<input type="hidden" id="user-id" value="{{ user_id }}">
-<script src="{{ url_for('static', filename='ajax.js') }}"></script>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-</head>
-<body>
-<header>
-	<span class="btn-grp">
-		<form action="{{ url_for('logout') }}" method="POST">
-			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-			<button type="submit" id='logout' class="btn" name="logoutbtn">Log Out</button>
-		</form>
-	</span><span>Connect to Course</span>
+{% extends "base.html" %}
 
-	<span style="cursor: pointer; float: left;" onclick="openNav()">&#9776;</span>
-</header>
-<br><br><br><br><br>
-<br style= "clear: both;">
+{% block title %}My Dashboard — Connect to Course{% endblock %}
 
-<!-- Flash message modal-->
-{% with messages = get_flashed_messages(with_categories=True) %}
-  {% if messages %}
-    <div class="flash-modal">
-      <div class="flash-modal-content">
-        {% for category, message in messages %}
-          {% if category == 'failure' %}
-            <div class="flash-message flash-danger">{{ message }}</div>
-          {% elif category == 'login' %}
-            <div class="flash-message flash-success">{{ message }}</div>
-          {% endif %}
-        {% endfor %}
+{% block content %}
+  <!-- User Welcome Hero -->
+  <section class="hero-card">
+    <div class="hero-text">
+      <h1>Welcome back, {{ username }}!</h1>
+      <p>
+        Continue building your tech skills. You currently have
+        <strong style="color:#FFF;">{{ saved_courses|length }}</strong> course{{ 's' if saved_courses|length != 1 else '' }} in your bookmarks.
+      </p>
+      <div style="margin-top: 18px; display:flex; gap:12px;">
+        <button class="btn btn-primary" onclick="openDrawer()">
+          <i class="fas fa-bookmark"></i> View My Bookmarks ({{ saved_courses|length }})
+        </button>
       </div>
     </div>
-  {% endif %}
-{% endwith %}
-<!--End of flash message template-->
-
-<!-- Sidenav for Courses Bookmark -->
-
-<div id="bookmark_container" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <p style="color: white; text-align: left; padding-left: 32px;">Bookmark</p>
-    <!-- Saved Courses for the user comes in here -->
-    {% for course in saved_courses %}
-    <div class="bookmark">
-        <a href='{{ course.url }}' target='_blank'><img src="{{ url_for('static', filename='images/img2.png') }}" style="width: 100%;"></a>
-        <b style="color: white; font-size: 0.6em;">{{ course.title }}</b>
-        <i style="font-size: 0.4em; color: white"> By: {{ course.instructor }}</i>
-        <span class="delete" data-id="{{ course.id }}" data-user_id="{{ user_id }}"> <i class="far fa-trash-alt"></i></span>
+    <div class="hero-search">
+      <form class="search-box" onsubmit="event.preventDefault(); performSearch(document.getElementById('search-input').value);">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search courses..."
+          oninput="handleSearchInput(this.value)"
+          autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
     </div>
-    {% endfor %}
-</div>
+  </section>
 
-<!-- End of Sidenav -->
+  <!-- Live Search Results Section (Shown dynamically) -->
+  <section id="search-results-section" style="display: none; margin-bottom: 40px;">
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fas fa-search"></i>
+        <span>Search Results</span>
+      </h2>
+    </div>
+    <div class="courses-grid" id="search-results">
+      <!-- Injected by JavaScript -->
+    </div>
+  </section>
 
-<div id="main">
-
-<div class="container"> 
-	<div class="flex-item1" style="padding-left: auto;"><h1 style="margin-top: 0px;">Learn everything in a place</h1>
-		<p>Welcome {{ username }}!</p>
-		<p>Search for courses, get up-to-date online courses and bookmark your preferred courses for free.</p>
-	</div>	
-	<div class="flex-item1">
-		<div class="flex-item2">
-			<img src="{{ url_for('static', filename='images/img.png') }}" style="width: 170px;">
-			<br><br>
-			<form class="search-container" style="width: 100%;">
-				<input id="search-input" type="text" placeholder="Search.." required>
-				<button type="submit"><i class="fa fa-search"></i></button>
-			</form>
-		</div>
-
-	</div>
-</div>
-
-<!-- Search Results comes in here -->
-<div class="result" id="result-head"><h3></h3></div>
-<div class="container" id="search-results"> </div>
-
-<!-- Generate 10 random courses-->
-<div class="result"><h3>Random Courses</h3></div>
-<br>
-<div class="container">
-	{% for result in random_courses %}
-	<div class="flex-item3">
-		<a href='{{ result.url }}' target='_blank'><img src="{{ url_for('static', filename='images/img2.png') }}" style="width: 100%;"></a>
-		<b>{{ result.title }}</b>
-		<i>By: {{ result.instructor }}</i><br>
-		<button class="savebtn" data-id="{{ result.id }}" data-user_id="{{ user_id }}"><i class="fas fa-save"></i> Save</button>
-	</div>
+  <!-- Saved Courses Section on Dashboard -->
+  {% if saved_courses and saved_courses|length > 0 %}
+    <section style="margin-bottom: 40px;">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="fas fa-bookmark" style="color: var(--primary);"></i>
+          <span>My Bookmarked Courses</span>
+        </h2>
+        <span style="font-size:0.9rem; color:var(--text-muted);">
+          {{ saved_courses|length }} saved
+        </span>
+      </div>
+      <div class="courses-grid" id="dashboard-bookmarks-grid">
+        {% for course in saved_courses %}
+          <div class="course-card" id="card-bookmark-{{ course.id }}">
+            <div class="course-thumb-wrap">
+              <img class="course-thumb" src="{{ url_for('static', filename='images/img2.png') }}" alt="{{ course.title }}">
+              <span class="course-platform-badge">Udemy</span>
+            </div>
+            <div class="course-body">
+              <h3 class="course-title" title="{{ course.title }}">{{ course.title }}</h3>
+              <p class="course-instructor">Instructor: {{ course.instructor }}</p>
+              <div class="course-footer">
+                <a href="{{ course.url }}" target="_blank" class="btn-view">
+                  <i class="fas fa-external-link-alt"></i> Go to Course
+                </a>
+                <button
+                  class="btn-save saved"
+                  title="Remove bookmark"
+                  onclick="deleteBookmark('{{ course.id }}'); document.getElementById('card-bookmark-{{ course.id }}')?.remove();"
+                >
+                  <i class="fas fa-trash-alt"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
         {% endfor %}
-</div>
+      </div>
+    </section>
+  {% endif %}
 
-</div> <!-- end of main id -->
-<br>
-<br><br><br>
-<br>
-<footer>
-	<a href='https://github.com/Mubarak1A/Connect-TO-Course'><i class='fa fa-github'></i>   Connect-to-Course  </a>
-	<br>
-	<a href="{{ url_for('list_courses') }}">Course API</a>
-</footer>
+  <!-- Recommended / Discovery Courses Section -->
+  <section>
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fas fa-compass"></i>
+        <span>Explore Courses</span>
+      </h2>
+      <span style="font-size:0.9rem; color:var(--text-muted);">
+        Curated recommendations
+      </span>
+    </div>
 
-</body>
-</html>
+    {% if random_courses and random_courses|length > 0 %}
+      <div class="courses-grid">
+        {% for course in random_courses %}
+          <div class="course-card">
+            <div class="course-thumb-wrap">
+              <img class="course-thumb" src="{{ url_for('static', filename='images/img2.png') }}" alt="{{ course.title }}">
+              <span class="course-platform-badge">Udemy</span>
+            </div>
+            <div class="course-body">
+              <h3 class="course-title" title="{{ course.title }}">{{ course.title }}</h3>
+              <p class="course-instructor">Instructor: {{ course.instructor }}</p>
+              <div class="course-footer">
+                <a href="{{ course.url }}" target="_blank" class="btn-view">
+                  <i class="fas fa-external-link-alt"></i> View Course
+                </a>
+                <button
+                  class="btn-save"
+                  data-id="{{ course.id }}"
+                  onclick="saveCourse(this, '{{ course.id }}', '{{ course.title|e }}', '{{ course.instructor|e }}', '{{ course.url }}')"
+                >
+                  <i class="far fa-bookmark"></i> Save
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <i class="fas fa-book-open"></i>
+        <h3>No recommendations right now</h3>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

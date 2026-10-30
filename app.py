@@ -63,7 +63,19 @@ def index():
                 flash("Invalid Login Details!", "failure")
                 return redirect(url_for('index'))
 
-    return render_template('index.html', random_courses=random_courses)
+    user = None
+    saved_courses = []
+    if 'user_id' in session:
+        user = database.get_user(session['user_id'])
+        if user:
+            saved_courses = database.load_bookmark_list(user.id)
+
+    return render_template(
+        'index.html',
+        random_courses=random_courses,
+        saved_courses=saved_courses,
+        username=user.username if user else None
+    )
 
 
 

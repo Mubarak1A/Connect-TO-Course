@@ -1,177 +1,91 @@
-<!DOCTYPE html>
-<html lang='en-US'>
-<head>
-<title>Connect to Course — Home</title>
-<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-<meta charset="UTF-8">
-<meta name="description" content="connect to course">
-<meta name="author" name="Aluko and Mubarak">
-<meta name="keywords" content="free good best top online courses choice build career">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<script src='https://kit.fontawesome.com/a9534c06e2.js' crossorigin='anonymous'></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<input type="hidden" id="user-id" value="undefined">
-<script src="{{ url_for('static', filename='ajax.js') }}"></script>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
-</head>
-<body>
-<header>Connect to Course
-        <span class="btn-grp">
-                <button onclick="document.getElementById('f2').style.display='block'" style="width: auto;" type="button" class="btn" id="sign">Sign Up</button>
-                <button onclick="document.getElementById('f1').style.display='block'" style="width: auto;" type="button" class="btn">Log in</button>
-        </span>
-</header>
+{% extends "base.html" %}
 
-<br>
-<br><br><br><br><br>
+{% block title %}Connect to Course — Explore & Bookmark Online Courses{% endblock %}
 
+{% block content %}
+  <!-- Hero Banner -->
+  <section class="hero-card">
+    <div class="hero-text">
+      <h1>Learn Everything in One Place</h1>
+      <p>
+        Explore curated top courses across software engineering, web development, data science, and cloud computing.
+        Search and bookmark all your learning paths in one single place.
+      </p>
+    </div>
+    <div class="hero-search">
+      <form class="search-box" onsubmit="event.preventDefault(); performSearch(document.getElementById('search-input').value);">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by topic, e.g. Python, React, SQL..."
+          oninput="handleSearchInput(this.value)"
+          autocomplete="off"
+        >
+        <button type="submit" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </section>
 
-<!-- Flash message modal-->
-{% with messages = get_flashed_messages(with_categories=True) %}
-  {% if messages %}
-    <div class="flash-modal">
-      <div class="flash-modal-content">
-        {% for category, message in messages %}
-          {% if category == 'signup' %}
-            <div class="flash-message flash-success">{{ message }}</div>
-          {% elif category == 'login' %}
-            <div class="flash-message flash-success">{{ message }}</div>
-          {% elif category == 'failure' %}
-            <div class="flash-message flash-danger">{{ message }}</div>
-          {% elif category == 'warning' %}
-            <div class="flash-message flash-warning">{{ message }}</div>
-          {% endif %}
+  <!-- Live Search Results Section (Shown dynamically) -->
+  <section id="search-results-section" style="display: none; margin-bottom: 40px;">
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fas fa-search"></i>
+        <span>Search Results</span>
+      </h2>
+    </div>
+    <div class="courses-grid" id="search-results">
+      <!-- Injected by JavaScript -->
+    </div>
+  </section>
+
+  <!-- Featured / Recommended Courses Section -->
+  <section>
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fas fa-compass"></i>
+        <span>Featured Courses</span>
+      </h2>
+      <span style="font-size:0.9rem; color:var(--text-muted);">
+        Showing {{ random_courses|length }} curated courses
+      </span>
+    </div>
+
+    {% if random_courses and random_courses|length > 0 %}
+      <div class="courses-grid">
+        {% for course in random_courses %}
+          <div class="course-card">
+            <div class="course-thumb-wrap">
+              <img class="course-thumb" src="{{ url_for('static', filename='images/img2.png') }}" alt="{{ course.title }}">
+              <span class="course-platform-badge">Udemy</span>
+            </div>
+            <div class="course-body">
+              <h3 class="course-title" title="{{ course.title }}">{{ course.title }}</h3>
+              <p class="course-instructor">Instructor: {{ course.instructor }}</p>
+              <div class="course-footer">
+                <a href="{{ course.url }}" target="_blank" class="btn-view">
+                  <i class="fas fa-external-link-alt"></i> View Course
+                </a>
+                <button
+                  class="btn-save"
+                  data-id="{{ course.id }}"
+                  onclick="saveCourse(this, '{{ course.id }}', '{{ course.title|e }}', '{{ course.instructor|e }}', '{{ course.url }}')"
+                >
+                  <i class="far fa-bookmark"></i> Save
+                </button>
+              </div>
+            </div>
+          </div>
         {% endfor %}
       </div>
-    </div>
-  {% endif %}
-{% endwith %}
-<!--End of flash message template-->
-
-
-<!--Modal Log in form -->
-
-<div id="f1" class="modal">
-        <form class="modal-content animate" action="/" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="closecontainer">
-                        <span onclick="document.getElementById('f1').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <div class="fcontainer">
-                        <h1>Log in</h1>
-                        <p style="font-size: 16px;">Please fill this form to log in</p>
-                <hr>
-                        <label for="username"><b>Username</b></label>
-                        <input type="text" placeholder="Enter Username" name="username" required>
-
-                        <label for="password"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="password" required>
-
-			<label style="margin-bottom:15px; font-size: 18px;"><input type="checkbox" checked="checked" name="remember">Remember me</label><br>
-                        <div style="text-align: center"><button type="submit" id='login' class="logbtn" name="loginbtn">Login</button></div>
-
-                </div>
-
-                <div class="psw"> Forgot <a href="#" style="text-decoration: none;">password?</a> </div>
-        </form>
-
-</div>
-
-<!--End of log in form -->
-
-
-
-<!-- Modal Sign Up form -->
-
-<div id="f2" class="modal">
-        <form class="modal-content animate" action="/" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="closecontainer">
-                        <span onclick="document.getElementById('f2').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <div class="fcontainer">
-                <h1>Sign Up</h1>
-                <p style="font-size: 16px;">Create an account for free.</p>
-                <hr>
-                <label for="username"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="username" required>
-
-		<label for="email"><b>Email</b></label>
-		<input type="email" placeholder="Enter Email" name="email" required>
-
-                <label for="password"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="password" required>
-
-                <label for="password-repeat"><b>Repeat Password</b></label>
-                <input type="password" placeholder="Repeat Password" name="password-repeat" required>
-
-                <label style="margin-bottom:15px; font-size: 18px;">
-                <input type="checkbox" checked="checked" name="remember">Remember me
-                </label>
-
-                <div style="text-align: center">
-                <button type="submit" id='Signup' class="signupbtn" name="signupbtn">Sign Up</button>
-                </div>
-
-        </div>
-        </form>
-
-</div>
-
- 
-
-<div id="main">
-
-
-<div class="container">
-        <div class="flex-item1" style="padding-left: auto;"><h1 style="margin-top: 0px;">Learn everything in a place</h1>
-                <p>Search for courses, get up-to-date online courses and sign up for free to bookmark your preferred courses.</p>
-        </div>
-
-        <div class="flex-item1">
-                <div class="flex-item2">
-                        <img src="{{ url_for('static', filename='images/img.png') }}" style="width: 170px;">
-                                <br><br>
-                                <form class="search-container" style="width: 100%;">
-                                        <input type="text" id="search-input" placeholder="Search..">
-                                        <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
-                </div>
-
-        </div>
-</div>
-
-
-<!-- Search Results comes in here -->
-<div class="result" id="result-head"><h3></h3></div>
-<div class="container" id="search-results"> </div>
-
-<!-- Generate 10 random courses -->
-<div class="result"><h3>Random Courses</h3></div>
-<br>
-<div class="container">
-	{% for result in random_courses %}
-	<div class="flex-item3">
-		<a href='{{ result.url }}' target='_blank'><img src="{{ url_for('static', filename='images/img2.png') }}" style="width: 100%;"></a>
-		<b>{{ result.title }}</b>
-		<i>By: {{ result.instructor }}  </i><br>
-		<button class="savebtn" name='{{ result.url }}'> <i class="fas fa-save"></i> Save</button>
-	</div>
-	{% endfor %}
-</div>
-
-</div>
-<br>
-<br><br><br>
-<br>
-  <footer>
-	  <a href='https://github.com/Mubarak1A/Connect-TO-Course'><i class='fa fa-github'></i>   Connect-to-Course  </a>
-	  <br>
-	  <a href="{{ url_for('list_courses') }}">Course API</a>
-  </footer>
-
-</body>
-</html>
+    {% else %}
+      <div class="empty-state">
+        <i class="fas fa-book-open"></i>
+        <h3>No courses available right now</h3>
+        <p>Check back shortly or visit the admin area to add courses.</p>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
