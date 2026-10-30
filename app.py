@@ -24,6 +24,14 @@ def index():
             password = request.form['password']
             email = request.form['email']
 
+            # Check for duplicate username or email
+            if database.get_user_by_username(username):
+                flash("Username already taken. Please choose another.", "failure")
+                return redirect(url_for('index'))
+            if database.get_user_by_email(email):
+                flash("Email already registered. Please log in.", "failure")
+                return redirect(url_for('index'))
+
             # Create a new user in the database
             database.add_user_details(username, password, email)
 

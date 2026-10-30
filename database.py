@@ -99,6 +99,22 @@ def delete_bookmark(user_id, course_id):
     finally:
         Session.remove()
 
+def get_user_by_username(username):
+    """Check if a username already exists in the database"""
+    session = Session()
+    try:
+        return session.query(User).filter_by(username=username).first()
+    finally:
+        Session.remove()
+
+def get_user_by_email(email):
+    """Check if an email already exists in the database"""
+    session = Session()
+    try:
+        return session.query(User).filter_by(email=email).first()
+    finally:
+        Session.remove()
+
 def check_user_login(username, passwd):
     """Check user credentials — verifies against hashed password"""
     session = Session()
