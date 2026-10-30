@@ -23,6 +23,12 @@
 
       <div class="nav-actions">
         {% if session.get('user_id') %}
+          {% if session.get('is_admin') %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline" style="border-color: #F59E0B; color: #F59E0B;">
+              <i class="fas fa-shield-alt"></i>
+              <span>Admin Panel</span>
+            </a>
+          {% endif %}
           <button class="btn btn-bookmark-toggle" id="toggle-bookmarks-btn" onclick="toggleDrawer()">
             <i class="fas fa-bookmark"></i>
             <span>Bookmarks</span>

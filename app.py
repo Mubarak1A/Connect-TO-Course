@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_wtf.csrf import CSRFProtect
+from functools import wraps
 import os
 
 try:
@@ -57,7 +58,10 @@ def index():
             user = database.check_user_login(username, password)
             if user:
                 session['user_id'] = user.id  # Store only user_id in session
+                session['is_admin'] = bool(user.is_admin)
                 flash('Login Successful!', 'login')
+                if user.is_admin:
+                    return redirect(url_for('admin_dashboard'))
                 return redirect(url_for('userpage'))
             else:
                 flash("Invalid Login Details!", "failure")
@@ -165,6 +169,81 @@ def delete():
         course_id=course_id,
         bookmark_count=len(bookmark_ids)
     )
+
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id = session.get('user_id')
+        if not user_id:
+            flash("Please log in as an administrator to access the admin panel.", "warning")
+            return redirect(url_for('index'))
+        user = database.get_user(user_id)
+        if not user or not user.is_admin:
+            flash("Access denied. Administrator privileges required.", "failure")
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    """Admin dashboard — course management and analytics"""
+    courses = database.load_courses()
+    stats = database.get_system_stats()
+    user = database.get_user(session['user_id'])
+    return render_template(
+        'admin.html',
+        courses=courses,
+        stats=stats,
+        username=user.username
+    )
+
+
+@app.route('/admin/course/add', methods=['POST'])
+@admin_required
+def admin_add_course():
+    """Admin endpoint: Add a new course"""
+    title = request.form.get('title')
+    url = request.form.get('url')
+    instructor = request.form.get('instructor')
+
+    if not title or not url or not instructor:
+        flash("All fields (title, url, instructor) are required.", "failure")
+        return redirect(url_for('admin_dashboard'))
+
+    database.add_course(title, url, instructor)
+    flash(f"Course '{title}' successfully added!", "signup")
+    return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/admin/course/edit/<int:course_id>', methods=['POST'])
+@admin_required
+def admin_edit_course(course_id):
+    """Admin endpoint: Update an existing course"""
+    title = request.form.get('title')
+    url = request.form.get('url')
+    instructor = request.form.get('instructor')
+
+    updated = database.update_course(course_id, title, url, instructor)
+    if updated:
+        flash(f"Course '{title}' updated successfully!", "login")
+    else:
+        flash("Course not found or update failed.", "failure")
+    return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/admin/course/delete/<int:course_id>', methods=['POST'])
+@admin_required
+def admin_delete_course(course_id):
+    """Admin endpoint: Delete a course"""
+    success = database.delete_course(course_id)
+    if success:
+        flash("Course deleted successfully.", "warning")
+    else:
+        flash("Failed to delete course.", "failure")
+    return redirect(url_for('admin_dashboard'))
 
 
 @app.route('/health', methods=['GET'])
