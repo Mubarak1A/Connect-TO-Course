@@ -1,7 +1,7 @@
 from datetime import datetime
 import json
 import os
-from sqlalchemy import Column, Integer, String, Text, create_engine
+from sqlalchemy import Column, Integer, String, Text, Boolean, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
 try:
@@ -20,6 +20,7 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=True)
     bookmark = Column(Text, default="[]")
+    is_admin = Column(Boolean, default=False)
     
     def get_bookmark(self):
         return json.loads(self.bookmark)
