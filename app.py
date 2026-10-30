@@ -1,6 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_wtf.csrf import CSRFProtect
 import os
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from models import User, Course
 import database
 import functionalties

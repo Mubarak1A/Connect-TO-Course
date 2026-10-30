@@ -4,6 +4,12 @@ import os
 from sqlalchemy import Column, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 Base = declarative_base()
 
 class User(Base):
