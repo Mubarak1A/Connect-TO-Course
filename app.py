@@ -12,7 +12,6 @@ except ImportError:
 from models import User, Course
 import database
 import functionalties
-import seed
 
 
 app = Flask(__name__)
@@ -20,9 +19,6 @@ app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-secret-change-in-pro
 
 # CSRF protection — applies to all state-changing requests
 csrf = CSRFProtect(app)
-
-# Auto-seed the database with sample courses if it's empty
-seed.seed()
 
 
 @app.route("/", methods=['GET', 'POST'])
