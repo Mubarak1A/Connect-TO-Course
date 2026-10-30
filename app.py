@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
+from flask_wtf.csrf import CSRFProtect
 import os
 from models import User, Course
 import database
@@ -7,8 +8,10 @@ import seed
 
 
 app = Flask(__name__)
-
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-secret-change-in-prod')
+
+# CSRF protection — applies to all state-changing requests
+csrf = CSRFProtect(app)
 
 # Auto-seed the database with sample courses if it's empty
 seed.seed()
@@ -94,6 +97,7 @@ def search():
 
 
 @app.route('/save', methods=['POST'])
+@csrf.exempt
 def save():
     # Retrieve the course url and username.
     data = request.get_json(force=True)
@@ -107,6 +111,7 @@ def save():
 
 
 @app.route("/delete", methods=['POST'])
+@csrf.exempt
 def delete():
     # Retrieve the course url and username.
     data = request.get_json(force=True)

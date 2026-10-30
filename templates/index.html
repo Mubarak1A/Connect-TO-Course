@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang = 'en-US'>
+<html lang='en-US'>
 <head>
-<title>Home page</title>
-<link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+<title>Connect to Course — Home</title>
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 <meta charset="UTF-8">
 <meta name="description" content="connect to course">
 <meta name="author" name="Aluko and Mubarak">
 <meta name="keywords" content="free good best top online courses choice build career">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <script src='https://kit.fontawesome.com/a9534c06e2.js' crossorigin='anonymous'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <input type="hidden" id="user-id" value="undefined">
-<script src="static/ajax.js"></script>
-<script src="static/script.js"></script>
+<script src="{{ url_for('static', filename='ajax.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
 <header>Connect to Course
@@ -55,6 +54,7 @@
 
 <div id="f1" class="modal">
         <form class="modal-content animate" action="/" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="closecontainer">
                         <span onclick="document.getElementById('f1').style.display='none'" class="close" title="Close Modal">&times;</span>
                 </div>
@@ -87,7 +87,7 @@
 
 <div id="f2" class="modal">
         <form class="modal-content animate" action="/" method="POST">
-
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="closecontainer">
                         <span onclick="document.getElementById('f2').style.display='none'" class="close" title="Close Modal">&times;</span>
                 </div>
@@ -100,7 +100,7 @@
                 <input type="text" placeholder="Enter Username" name="username" required>
 
 		<label for="email"><b>Email</b></label>
-		<input type="text" placeholder="Enter Email" name="email" required>
+		<input type="email" placeholder="Enter Email" name="email" required>
 
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="password" required>
@@ -128,15 +128,15 @@
 
 <div class="container">
         <div class="flex-item1" style="padding-left: auto;"><h1 style="margin-top: 0px;">Learn everything in a place</h1>
-                <p>Seach for courses, get an up-to-date online courses and sign up for free to bookmark your preferred or choiced courses.</p>
+                <p>Search for courses, get up-to-date online courses and sign up for free to bookmark your preferred courses.</p>
         </div>
 
         <div class="flex-item1">
                 <div class="flex-item2">
-                        <img src="static/images/img.png" style="width: 170px;">
+                        <img src="{{ url_for('static', filename='images/img.png') }}" style="width: 170px;">
                                 <br><br>
-                                <form class="search-container" style="width: 100%;" action="/search" method="GET">
-                                        <input type="text" id="search-input" placeholder="Search.." required>
+                                <form class="search-container" style="width: 100%;">
+                                        <input type="text" id="search-input" placeholder="Search..">
                                         <button type="submit"><i class="fa fa-search"></i></button>
                                 </form>
                 </div>
@@ -155,7 +155,7 @@
 <div class="container">
 	{% for result in random_courses %}
 	<div class="flex-item3">
-		<a href='{{ result.url }}' target='_blank'><img src="static/images/img2.png" style="width: 100%;"></a>
+		<a href='{{ result.url }}' target='_blank'><img src="{{ url_for('static', filename='images/img2.png') }}" style="width: 100%;"></a>
 		<b>{{ result.title }}</b>
 		<i>By: {{ result.instructor }}  </i><br>
 		<button class="savebtn" name='{{ result.url }}'> <i class="fas fa-save"></i> Save</button>
