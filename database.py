@@ -1,5 +1,6 @@
 import json
 from sqlalchemy.orm import sessionmaker, scoped_session
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Course, engine
 
 # Scoped session — thread-safe, one session per request context
@@ -99,18 +100,22 @@ def delete_bookmark(user_id, course_id):
         Session.remove()
 
 def check_user_login(username, passwd):
-    """Check if user details in the database"""
+    """Check user credentials — verifies against hashed password"""
     session = Session()
     try:
-        return session.query(User).filter_by(username=username, password=passwd).first()
+        user = session.query(User).filter_by(username=username).first()
+        if user and check_password_hash(user.password, passwd):
+            return user
+        return None
     finally:
         Session.remove()
 
 def add_user_details(username, password, email):
-    """Add user details to the database"""
+    """Add user details to the database — password is stored hashed"""
     session = Session()
     try:
-        new_user = User(username=username, password=password, email=email)
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, password=hashed_password, email=email)
         session.add(new_user)
         session.commit()
         print("User Details Added Successfully!")
