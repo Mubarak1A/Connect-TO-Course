@@ -99,28 +99,53 @@ def search():
 @app.route('/save', methods=['POST'])
 @csrf.exempt
 def save():
-    # Retrieve the course url and username.
-    data = request.get_json(force=True)
+    data = request.get_json(force=True) or {}
     course_id = data.get('id')
-    user_id = data.get('user_id')
+    user_id = data.get('user_id') or session.get('user_id')
 
-    # Save the course id to the database
-    database.save_course(user_id, course_id)
+    if not user_id:
+        return jsonify(status="error", message="Authentication required"), 401
 
-    return redirect(url_for('userpage'))
+    if not course_id:
+        return jsonify(status="error", message="Course ID is required"), 400
+
+    success = database.save_course(user_id, course_id)
+    if not success:
+        return jsonify(status="error", message="Failed to save course"), 400
+
+    bookmark_ids = database.load_bookmark(user_id)
+    return jsonify(
+        status="success",
+        message="Course saved successfully",
+        course_id=course_id,
+        bookmark_count=len(bookmark_ids)
+    )
 
 
 @app.route("/delete", methods=['POST'])
 @csrf.exempt
 def delete():
-    # Retrieve the course url and username.
-    data = request.get_json(force=True)
+    data = request.get_json(force=True) or {}
     course_id = data.get('id')
-    user_id = data.get('user_id')
+    user_id = data.get('user_id') or session.get('user_id')
 
-    database.delete_bookmark(user_id, course_id)
+    if not user_id:
+        return jsonify(status="error", message="Authentication required"), 401
 
-    return redirect(url_for('userpage'))
+    if not course_id:
+        return jsonify(status="error", message="Course ID is required"), 400
+
+    success = database.delete_bookmark(user_id, course_id)
+    if not success:
+        return jsonify(status="error", message="Failed to delete bookmark"), 400
+
+    bookmark_ids = database.load_bookmark(user_id)
+    return jsonify(
+        status="success",
+        message="Bookmark removed successfully",
+        course_id=course_id,
+        bookmark_count=len(bookmark_ids)
+    )
 
 
 @app.route('/courses_api')

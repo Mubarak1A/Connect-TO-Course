@@ -68,16 +68,19 @@ def save_course(user_id, course_id):
     session = Session()
     try:
         user = session.query(User).get(user_id)
-        if user:
-            bookmark_ids = user.get_bookmark()
-        else:
-            bookmark_ids = []
+        if not user:
+            return False
+        bookmark_ids = [int(i) for i in user.get_bookmark()]
+        try:
+            cid = int(course_id)
+        except (ValueError, TypeError):
+            return False
 
-        if course_id not in bookmark_ids:
-            bookmark_ids.append(course_id)
-
-        user.set_bookmark(bookmark_ids)
-        session.commit()
+        if cid not in bookmark_ids:
+            bookmark_ids.append(cid)
+            user.set_bookmark(bookmark_ids)
+            session.commit()
+        return True
     finally:
         Session.remove()
 
@@ -86,16 +89,19 @@ def delete_bookmark(user_id, course_id):
     session = Session()
     try:
         user = session.query(User).get(user_id)
-        if user:
-            bookmark_ids = user.get_bookmark()
-        else:
-            bookmark_ids = []
+        if not user:
+            return False
+        bookmark_ids = [int(i) for i in user.get_bookmark()]
+        try:
+            cid = int(course_id)
+        except (ValueError, TypeError):
+            return False
 
-        if course_id in bookmark_ids:
-            bookmark_ids.remove(course_id)
-
-        user.set_bookmark(bookmark_ids)
-        session.commit()
+        if cid in bookmark_ids:
+            bookmark_ids.remove(cid)
+            user.set_bookmark(bookmark_ids)
+            session.commit()
+        return True
     finally:
         Session.remove()
 
